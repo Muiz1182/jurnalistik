@@ -22,4 +22,14 @@
     .font-sans-editorial {
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
+    /* Hide scrollbar while preserving scrollability */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
 }

@@ -28,6 +28,16 @@
             background-color: #F8FAFC;
             color: #0F172A;
         }
+        /* Completely hide scrollbars while maintaining full scrollability */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
     </style>
 
     @stack('styles')
@@ -61,7 +71,7 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-sm text-white tracking-tight block">REDAKSI SPELAND</span>
-                        <span class="text-3xs text-slate-400 block uppercase font-mono">Sistem Redaksi Digital</span>
+                        <span class="text-3xs text-slate-400 block uppercase tracking-wider font-semibold">Sistem Redaksi Digital</span>
                     </div>
                 </a>
                 <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white p-1">
@@ -69,8 +79,8 @@
                 </button>
             </div>
 
-            <!-- 2. Scrollable Navigation List -->
-            <nav class="flex-1 overflow-y-auto p-3 space-y-1 text-xs font-semibold">
+            <!-- 2. Scrollable Navigation List (Clean No Scrollbar) -->
+            <nav class="flex-1 overflow-y-auto no-scrollbar p-3 space-y-1 text-xs font-semibold">
                 
                 @php $isDashboard = request()->routeIs('admin.dashboard'); @endphp
                 <a href="{{ route('admin.dashboard') }}" 
@@ -249,7 +259,7 @@
                     <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0">
                     <div class="flex-grow overflow-hidden min-w-0">
                         <span class="font-bold text-xs text-white block truncate">{{ auth()->user()->name }}</span>
-                        <span class="text-3xs text-blue-400 block truncate font-mono uppercase">{{ auth()->user()->role->name ?? 'Staf Redaksi' }}</span>
+                        <span class="text-3xs text-blue-400 block truncate font-semibold uppercase tracking-wider">{{ auth()->user()->role->name ?? 'Staf Redaksi' }}</span>
                     </div>
                 </div>
             </div>
