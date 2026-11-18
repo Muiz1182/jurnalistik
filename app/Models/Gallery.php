@@ -61,4 +61,9 @@ class Gallery extends Model
         }
         return asset('images/placeholder-gallery.jpg');
     }
+
+    public function getCoverUrlAttribute(): string
+    {
+        return $this->cover_image_url;
+    }
 }

@@ -40,7 +40,11 @@
                 </div>
             </div>
         @empty
-            <p class="text-xs text-slate-400 italic py-3 text-center">Belum ada data berita populer.</p>
+            <div class="py-6 text-center space-y-2">
+                <i data-lucide="trending-up" class="w-6 h-6 text-slate-300 mx-auto"></i>
+                <p class="text-xs text-slate-500 font-medium">Belum ada statistik artikel terpopuler.</p>
+                <p class="text-3xs text-slate-400">Peringkat akan diperbarui secara otomatis berdasarkan akumulasi pembaca unik.</p>
+            </div>
         @endforelse
     </div>
 </div>

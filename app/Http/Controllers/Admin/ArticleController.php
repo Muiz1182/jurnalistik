@@ -86,7 +86,7 @@ class ArticleController extends Controller
             'photographer_name' => 'nullable|string|max:100',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
             'image_caption' => 'nullable|string|max:255',
-            'action' => 'required|in:draft,submit,publish',
+            'action' => 'required|in:draft,save_draft,submit,publish',
             'tags' => 'nullable|array',
             'tags.*' => 'nullable|string',
             'seo_title' => 'nullable|string|max:255',

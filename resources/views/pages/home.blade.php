@@ -6,12 +6,12 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-12">
 
-    <!-- 1. HERO FRONT-PAGE SHOWCASE (LEAD STORY + SOROTAN REDAKSI) -->
+    <!-- 1. HERO FRONT-PAGE SHOWCASE -->
     <section class="border-b border-slate-200/80 pb-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            <!-- Lead Hero Headline (8 Columns) -->
-            @if($heroHeadline)
+        @if($heroHeadline)
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Lead Hero Headline (8 Columns) -->
                 <div class="lg:col-span-8 group">
                     <article class="flex flex-col">
                         <!-- Dominant Media Container -->
@@ -37,7 +37,6 @@
                                 @endif
                             </div>
 
-                            <!-- Photo Caption / Overlay Info -->
                             @if($heroHeadline->image_caption)
                                 <div class="absolute bottom-3 left-4 right-4 z-10 hidden sm:block">
                                     <p class="text-2xs text-slate-300/90 line-clamp-1 italic font-sans bg-slate-950/60 backdrop-blur-xs px-2.5 py-1 rounded inline-block">
@@ -49,7 +48,6 @@
 
                         <!-- Headline Typography & Details -->
                         <div class="space-y-3">
-                            <!-- Byline Metadata -->
                             <div class="flex flex-wrap items-center text-xs text-slate-500 gap-x-3 gap-y-1 font-medium">
                                 <span class="inline-flex items-center text-slate-900 font-bold">
                                     <i data-lucide="pen-tool" class="w-3.5 h-3.5 mr-1 text-blue-900"></i>
@@ -64,7 +62,6 @@
                                 </span>
                             </div>
 
-                            <!-- Main Editorial Title -->
                             <h1 class="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl text-slate-950 group-hover:text-blue-950 transition leading-tight tracking-tight">
                                 <a href="{{ route('articles.show', $heroHeadline->slug) }}">
                                     {{ $heroHeadline->title }}
@@ -83,7 +80,6 @@
                                 </p>
                             @endif
 
-                            <!-- CTA Strip -->
                             <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                                 <a href="{{ route('articles.show', $heroHeadline->slug) }}" 
                                    class="inline-flex items-center text-xs sm:text-sm font-bold text-blue-950 hover:text-blue-800 transition group/link">
@@ -97,77 +93,137 @@
                         </div>
                     </article>
                 </div>
-            @endif
 
-            <!-- Sorotan Redaksi (4 Columns Sidebar) -->
-            <div class="lg:col-span-4 space-y-5">
-                <div class="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-5 shadow-2xs">
-                    
-                    <div class="flex items-center justify-between pb-3.5 border-b-2 border-blue-950 mb-4">
-                        <h2 class="font-black text-xs uppercase tracking-wider text-slate-950 flex items-center">
-                            <span class="w-2.5 h-2.5 bg-blue-900 rounded-sm mr-2"></span>
-                            Sorotan Redaksi
-                        </h2>
-                        <span class="text-3xs uppercase tracking-widest font-bold text-slate-400">PILIHAN EDITOR</span>
-                    </div>
+                <!-- Sorotan Redaksi (4 Columns Sidebar) -->
+                <div class="lg:col-span-4 space-y-5">
+                    <div class="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-5 shadow-2xs">
+                        
+                        <div class="flex items-center justify-between pb-3.5 border-b-2 border-blue-950 mb-4">
+                            <h2 class="font-black text-xs uppercase tracking-wider text-slate-950 flex items-center">
+                                <span class="w-2.5 h-2.5 bg-blue-900 rounded-sm mr-2"></span>
+                                Sorotan Redaksi
+                            </h2>
+                            <span class="text-3xs uppercase tracking-widest font-bold text-slate-400">PILIHAN EDITOR</span>
+                        </div>
 
-                    <div class="space-y-4 divide-y divide-slate-200/70">
-                        @forelse($secondaryHeadlines as $secondary)
-                            <article class="group pt-4 first:pt-0">
-                                <div class="flex gap-3.5 items-start">
-                                    <!-- Mini Thumbnail -->
-                                    <a href="{{ route('articles.show', $secondary->slug) }}" class="w-24 sm:w-28 h-20 shrink-0 overflow-hidden rounded-xl bg-slate-200 block shadow-2xs">
-                                        <img src="{{ $secondary->featured_image_url }}" 
-                                             alt="{{ $secondary->title }}" 
-                                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                                    </a>
-
-                                    <!-- Content -->
-                                    <div class="flex-1 min-w-0">
-                                        <a href="{{ route('articles.category', $secondary->category->slug) }}" 
-                                           class="text-3xs font-extrabold text-blue-900 hover:text-red-600 uppercase tracking-wider block mb-1">
-                                            {{ $secondary->category->name }}
+                        <div class="space-y-4 divide-y divide-slate-200/70">
+                            @forelse($secondaryHeadlines as $secondary)
+                                <article class="group pt-4 first:pt-0">
+                                    <div class="flex gap-3.5 items-start">
+                                        <a href="{{ route('articles.show', $secondary->slug) }}" class="w-24 sm:w-28 h-20 shrink-0 overflow-hidden rounded-xl bg-slate-200 block shadow-2xs">
+                                            <img src="{{ $secondary->featured_image_url }}" 
+                                                 alt="{{ $secondary->title }}" 
+                                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                         </a>
-                                        <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-blue-950 transition leading-snug line-clamp-2">
-                                            <a href="{{ route('articles.show', $secondary->slug) }}">
-                                                {{ $secondary->title }}
+
+                                        <div class="flex-1 min-w-0">
+                                            <a href="{{ route('articles.category', $secondary->category->slug) }}" 
+                                               class="text-3xs font-extrabold text-blue-900 hover:text-red-600 uppercase tracking-wider block mb-1">
+                                                {{ $secondary->category->name }}
                                             </a>
-                                        </h3>
-                                        <div class="flex items-center text-3xs text-slate-400 mt-1.5 space-x-1.5">
-                                            <span>{{ $secondary->author->name }}</span>
-                                            <span>&bull;</span>
-                                            <span>{{ $secondary->published_at ? $secondary->published_at->locale('id')->diffForHumans() : '' }}</span>
+                                            <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-blue-950 transition leading-snug line-clamp-2">
+                                                <a href="{{ route('articles.show', $secondary->slug) }}">
+                                                    {{ $secondary->title }}
+                                                </a>
+                                            </h3>
+                                            <div class="flex items-center text-3xs text-slate-400 mt-1.5 space-x-1.5">
+                                                <span>{{ $secondary->author->name }}</span>
+                                                <span>&bull;</span>
+                                                <span>{{ $secondary->published_at ? $secondary->published_at->locale('id')->diffForHumans() : '' }}</span>
+                                            </div>
                                         </div>
                                     </div>
+                                </article>
+                            @empty
+                                <div class="py-6 text-center text-xs text-slate-400">
+                                    <p>Belum ada sorotan berita tambahan.</p>
                                 </div>
-                            </article>
-                        @empty
-                            <p class="text-xs text-slate-400 italic py-4">Belum ada sorotan naskah tambahan.</p>
-                        @endforelse
+                            @endforelse
+                        </div>
+
                     </div>
 
+                    <!-- Editorial Hotline & Whistleblower Box -->
+                    <div class="bg-gradient-to-br from-blue-950 to-slate-900 text-white p-5 rounded-2xl shadow-sm space-y-2.5">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="radio" class="w-4 h-4 text-red-400 animate-pulse"></i>
+                            <span class="text-2xs font-extrabold uppercase tracking-wider text-slate-300">Kanal Liputan Murid</span>
+                        </div>
+                        <h4 class="font-serif font-bold text-sm text-white leading-snug">
+                            Punya Info Kegiatan atau Prestasi Sekolah?
+                        </h4>
+                        <p class="text-2xs text-slate-300 leading-relaxed font-sans">
+                            Kirimkan ide liputan, rilis kegiatan kelas, atau karya esai Anda kepada meja redaksi Jurnalistik SPELAND.
+                        </p>
+                        <a href="{{ route('contact') }}" class="inline-flex items-center text-xs font-bold text-amber-300 hover:text-white transition pt-1">
+                            <span>Hubungi Meja Redaksi</span>
+                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Editorial Hotline & Whistleblower Box -->
-                <div class="bg-gradient-to-br from-blue-950 to-slate-900 text-white p-5 rounded-2xl shadow-sm space-y-2.5">
-                    <div class="flex items-center space-x-2">
-                        <i data-lucide="radio" class="w-4 h-4 text-red-400 animate-pulse"></i>
-                        <span class="text-2xs font-extrabold uppercase tracking-wider text-slate-300">Kanal Liputan Murid</span>
+            </div>
+        @else
+            <!-- Editorial Welcome Showcase (When No Articles Published Yet) -->
+            <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-800 relative overflow-hidden">
+                <div class="absolute right-0 top-0 translate-x-10 -translate-y-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="max-w-3xl space-y-5 relative z-10">
+                    <div class="inline-flex items-center space-x-2 bg-blue-900/80 border border-blue-700/60 px-3 py-1 rounded-full text-2xs font-extrabold uppercase tracking-widest text-blue-200">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <span>PERS PELAJAR DIGITAL RESMI</span>
                     </div>
-                    <h4 class="font-serif font-bold text-sm text-white leading-snug">
-                        Punya Info Kegiatan atau Prestasi Sekolah?
-                    </h4>
-                    <p class="text-2xs text-slate-300 leading-relaxed font-sans">
-                        Kirimkan ide liputan, rilis kegiatan kelas, atau karya esai Anda kepada meja redaksi Jurnalistik SPELAND.
+
+                    <h1 class="font-serif font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
+                        Mengabarkan Fakta, Menyuarakan Cerita.
+                    </h1>
+
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+                        Selamat datang di portal pers dan publikasi digital resmi <strong>SMP Negeri 9 Probolinggo</strong>. Wadah kreativitas jurnalistik, literasi kritis, dokumentasi kegiatan, dan apresiasi prestasi murid yang dikelola secara profesional oleh tim dewan redaksi sekolah.
                     </p>
-                    <a href="{{ route('contact') }}" class="inline-flex items-center text-xs font-bold text-amber-300 hover:text-white transition pt-1">
-                        <span>Hubungi Meja Redaksi</span>
-                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
-                    </a>
+
+                    <div class="pt-4 flex flex-wrap items-center gap-3">
+                        @auth
+                            <a href="{{ route('admin.articles.create') }}" class="px-5 py-3 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center">
+                                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                                <span>Tulis Naskah Berita Pertama</span>
+                            </a>
+                            <a href="{{ route('admin.dashboard') }}" class="px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition backdrop-blur-xs flex items-center">
+                                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-2"></i>
+                                <span>Masuk ke Meja Redaksi</span>
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="px-5 py-3 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center">
+                                <i data-lucide="lock" class="w-4 h-4 mr-2"></i>
+                                <span>Masuk Meja Redaksi</span>
+                            </a>
+                            <a href="{{ route('editorial.structure') }}" class="px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition backdrop-blur-xs flex items-center">
+                                <i data-lucide="users" class="w-4 h-4 mr-2"></i>
+                                <span>Struktur Redaksi</span>
+                            </a>
+                        @endauth
+                        <a href="{{ route('journalistic.guidelines') }}" class="px-4 py-3 text-slate-400 hover:text-white font-semibold text-xs transition flex items-center">
+                            <span>Pedoman Pemberitaan Ramah Anak &rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-300">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                        <span>Fakta Terverifikasi & Ramah Anak</span>
+                    </div>
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="git-branch" class="w-5 h-5 text-blue-400 shrink-0"></i>
+                        <span>Alur Redaksi Berlapis (Reporter &rarr; Editor)</span>
+                    </div>
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="database" class="w-5 h-5 text-purple-400 shrink-0"></i>
+                        <span>PostgreSQL 18 Full-Text Engine</span>
+                    </div>
                 </div>
             </div>
-
-        </div>
+        @endif
     </section>
 
     <!-- 2. KABAR TERBARU & SIDEBAR TERPOPULER (8 COLS + 4 COLS) -->
@@ -196,32 +252,48 @@
                     @forelse($latestArticles as $article)
                         <x-article-card :article="$article" layout="standard" />
                     @empty
-                        <div class="col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-400">
-                            Belum ada berita terbaru yang diterbitkan.
+                        <div class="col-span-2 p-8 sm:p-12 text-center bg-slate-50/80 rounded-2xl border border-slate-200 space-y-3">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-900 flex items-center justify-center mx-auto">
+                                <i data-lucide="newspaper" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-slate-800">Belum Ada Berita yang Diterbitkan</h3>
+                            <p class="text-xs text-slate-500 max-w-md mx-auto">
+                                Tim redaksi dan reporter sekolah sedang melakukan liputan kegiatan di lapangan. Berita yang disetujui akan tayang di bagian ini.
+                            </p>
+                            @auth
+                                <div class="pt-2">
+                                    <a href="{{ route('admin.articles.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-950 text-white rounded-lg text-xs font-bold hover:bg-blue-900 transition shadow-xs">
+                                        <i data-lucide="plus" class="w-3.5 h-3.5 mr-1"></i>
+                                        Buat Naskah Berita
+                                    </a>
+                                </div>
+                            @endauth
                         </div>
                     @endforelse
                 </div>
 
                 <!-- Category Showcase Strip: Pendidikan & Prestasi -->
-                <div class="pt-6 border-t border-slate-200">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-6">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 bg-blue-900 rounded-full"></span>
-                            <h3 class="font-extrabold text-base uppercase tracking-tight text-slate-900">
-                                Pendidikan & Prestasi Sekolah
-                            </h3>
+                @if($pendidikanArticles->isNotEmpty())
+                    <div class="pt-6 border-t border-slate-200">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-6">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 bg-blue-900 rounded-full"></span>
+                                <h3 class="font-extrabold text-base uppercase tracking-tight text-slate-900">
+                                    Pendidikan & Prestasi Sekolah
+                                </h3>
+                            </div>
+                            <a href="{{ route('articles.category', 'pendidikan') }}" class="text-xs font-bold text-slate-600 hover:text-blue-950 transition">
+                                Lihat Rubrik &rarr;
+                            </a>
                         </div>
-                        <a href="{{ route('articles.category', 'pendidikan') }}" class="text-xs font-bold text-slate-600 hover:text-blue-950 transition">
-                            Lihat Rubrik &rarr;
-                        </a>
-                    </div>
 
-                    <div class="space-y-4">
-                        @foreach($pendidikanArticles->take(3) as $pendidikan)
-                            <x-article-card :article="$pendidikan" layout="horizontal" />
-                        @endforeach
+                        <div class="space-y-4">
+                            @foreach($pendidikanArticles->take(3) as $pendidikan)
+                                <x-article-card :article="$pendidikan" layout="horizontal" />
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                @endif
 
             </div>
 
@@ -310,8 +382,19 @@
                     </div>
                 </article>
             @empty
-                <div class="col-span-3 text-center py-6 text-xs text-slate-400 italic">
-                    Belum ada esai atau opini yang dipublikasikan.
+                <div class="col-span-3 text-center py-8 bg-white/70 rounded-2xl border border-amber-200/50 p-6 space-y-2">
+                    <p class="text-xs text-slate-600 font-semibold">
+                        Ruang Opini Terbuka untuk Seluruh Warga SMP Negeri 9 Probolinggo
+                    </p>
+                    <p class="text-2xs text-slate-500 max-w-lg mx-auto">
+                        Murid dan dewan guru dapat mengirimkan karya tulis opini, catatan refleksi, esai budaya, atau resensi buku untuk diterbitkan di rubrik ini.
+                    </p>
+                    <div class="pt-2">
+                        <a href="{{ route('contact') }}" class="inline-flex items-center px-4 py-2 bg-amber-800 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition shadow-2xs">
+                            <i data-lucide="send" class="w-3.5 h-3.5 mr-1.5"></i>
+                            Kirim Naskah Opini Anda
+                        </a>
+                    </div>
                 </div>
             @endforelse
         </div>
@@ -337,93 +420,109 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
-            <!-- Left: Featured Video (7 Cols) -->
-            @php $featuredVideo = $videos->first(); @endphp
-            <div class="lg:col-span-7 space-y-4">
-                @if($featuredVideo)
-                    <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-lg group">
-                        @if($featuredVideo->youtube_id)
-                            <iframe class="w-full h-full" 
-                                    src="https://www.youtube.com/embed/{{ $featuredVideo->youtube_id }}" 
-                                    title="{{ $featuredVideo->title }}" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen></iframe>
-                        @else
-                            <img src="{{ $featuredVideo->thumbnail_url }}" alt="" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
-                                <div class="w-16 h-16 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-2xl">
-                                    <i data-lucide="play" class="w-7 h-7 ml-1 fill-white"></i>
+        @if($videos->isNotEmpty() || $podcasts->isNotEmpty() || $galleries->isNotEmpty())
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+                <!-- Left: Featured Video (7 Cols) -->
+                @php $featuredVideo = $videos->first(); @endphp
+                <div class="lg:col-span-7 space-y-4">
+                    @if($featuredVideo)
+                        <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-lg group">
+                            @if($featuredVideo->youtube_id)
+                                <iframe class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/{{ $featuredVideo->youtube_id }}" 
+                                        title="{{ $featuredVideo->title }}" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen></iframe>
+                            @else
+                                <img src="{{ $featuredVideo->thumbnail_url }}" alt="" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+                                    <div class="w-16 h-16 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-2xl">
+                                        <i data-lucide="play" class="w-7 h-7 ml-1 fill-white"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
-                    </div>
-                    <div>
-                        <span class="text-3xs uppercase font-extrabold tracking-wider text-red-400 block mb-1">VIDEO PILIHAN</span>
-                        <h3 class="font-bold text-base sm:text-lg text-white leading-snug">
-                            {{ $featuredVideo->title }}
-                        </h3>
-                        <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
-                            {{ $featuredVideo->description }}
-                        </p>
-                    </div>
-                @endif
-            </div>
-
-            <!-- Right: Podcast & Photo Album (5 Cols) -->
-            <div class="lg:col-span-5 space-y-5">
-                <!-- Podcast Showcase -->
-                @php $featuredPodcast = $podcasts->first(); @endphp
-                @if($featuredPodcast)
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
-                        <div class="flex items-center justify-between text-2xs">
-                            <span class="font-extrabold text-purple-400 uppercase tracking-wider flex items-center">
-                                <i data-lucide="mic" class="w-3.5 h-3.5 mr-1"></i>
-                                Episode #{{ $featuredPodcast->episode_number }}
-                            </span>
-                            <span class="text-slate-400 font-mono">{{ $featuredPodcast->duration ?: 'Audio' }}</span>
-                        </div>
-                        <h4 class="font-bold text-sm text-white leading-snug">
-                            {{ $featuredPodcast->title }}
-                        </h4>
-                        <div class="flex items-center space-x-2 text-2xs text-slate-400">
-                            <span>Host: {{ $featuredPodcast->host }}</span>
-                            @if($featuredPodcast->guest)
-                                <span>&bull;</span>
-                                <span>Tamu: {{ $featuredPodcast->guest }}</span>
                             @endif
                         </div>
-                        <a href="{{ route('multimedia.podcasts') }}" class="w-full inline-flex items-center justify-center py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl transition shadow-sm space-x-1.5">
-                            <i data-lucide="headphones" class="w-4 h-4 mr-1"></i>
-                            <span>Dengarkan Podcast SPELAND</span>
-                        </a>
-                    </div>
-                @endif
-
-                <!-- Photo Album Showcase -->
-                @php $featuredGallery = $galleries->first(); @endphp
-                @if($featuredGallery)
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden group">
-                        <a href="{{ route('multimedia.gallery.show', $featuredGallery->slug) }}" class="block relative aspect-[16/9] overflow-hidden">
-                            <img src="{{ $featuredGallery->cover_url }}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-                            <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-xs text-white text-3xs font-bold px-2 py-1 rounded-md flex items-center">
-                                <i data-lucide="camera" class="w-3 h-3 mr-1 text-blue-400"></i>
-                                {{ $featuredGallery->photos_count }} Dokumentasi Foto
-                            </span>
-                        </a>
-                        <div class="p-4">
-                            <h4 class="font-bold text-xs text-white group-hover:text-blue-400 transition leading-snug">
-                                <a href="{{ route('multimedia.gallery.show', $featuredGallery->slug) }}">
-                                    {{ $featuredGallery->title }}
-                                </a>
-                            </h4>
+                        <div>
+                            <span class="text-3xs uppercase font-extrabold tracking-wider text-red-400 block mb-1">VIDEO PILIHAN</span>
+                            <h3 class="font-bold text-base sm:text-lg text-white leading-snug">
+                                {{ $featuredVideo->title }}
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                                {{ $featuredVideo->description }}
+                            </p>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </div>
+
+                <!-- Right: Podcast & Photo Album (5 Cols) -->
+                <div class="lg:col-span-5 space-y-5">
+                    @php $featuredPodcast = $podcasts->first(); @endphp
+                    @if($featuredPodcast)
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+                            <div class="flex items-center justify-between text-2xs">
+                                <span class="font-extrabold text-purple-400 uppercase tracking-wider flex items-center">
+                                    <i data-lucide="mic" class="w-3.5 h-3.5 mr-1"></i>
+                                    Episode #{{ $featuredPodcast->episode_number }}
+                                </span>
+                                <span class="text-slate-400 font-mono">{{ $featuredPodcast->duration ?: 'Audio' }}</span>
+                            </div>
+                            <h4 class="font-bold text-sm text-white leading-snug">
+                                {{ $featuredPodcast->title }}
+                            </h4>
+                            <div class="flex items-center space-x-2 text-2xs text-slate-400">
+                                <span>Host: {{ $featuredPodcast->host }}</span>
+                                @if($featuredPodcast->guest)
+                                    <span>&bull;</span>
+                                    <span>Tamu: {{ $featuredPodcast->guest }}</span>
+                                @endif
+                            </div>
+                            <a href="{{ route('multimedia.podcasts') }}" class="w-full inline-flex items-center justify-center py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl transition shadow-sm space-x-1.5">
+                                <i data-lucide="headphones" class="w-4 h-4 mr-1"></i>
+                                <span>Dengarkan Podcast SPELAND</span>
+                            </a>
+                        </div>
+                    @endif
+
+                    @php $featuredGallery = $galleries->first(); @endphp
+                    @if($featuredGallery)
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden group">
+                            <a href="{{ route('multimedia.gallery.show', $featuredGallery->slug) }}" class="block relative aspect-[16/9] overflow-hidden">
+                                <img src="{{ $featuredGallery->cover_url }}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-xs text-white text-3xs font-bold px-2 py-1 rounded-md flex items-center">
+                                    <i data-lucide="camera" class="w-3 h-3 mr-1 text-blue-400"></i>
+                                    {{ $featuredGallery->photos_count }} Dokumentasi Foto
+                                </span>
+                            </a>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xs text-white group-hover:text-blue-400 transition leading-snug">
+                                    <a href="{{ route('multimedia.gallery.show', $featuredGallery->slug) }}">
+                                        {{ $featuredGallery->title }}
+                                    </a>
+                                </h4>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
+        @else
+            <!-- Multimedia Studio Standby State -->
+            <div class="text-center py-10 space-y-4 max-w-xl mx-auto">
+                <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 text-blue-400 flex items-center justify-center mx-auto shadow-inner">
+                    <i data-lucide="clapperboard" class="w-7 h-7"></i>
+                </div>
+                <h3 class="font-bold text-base text-white">Studio Konten Digital Sedang Mempersiapkan Liputan</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Kanal video liputan, episode siniar podcast murid, dan album foto resolusi tinggi akan dipublikasikan secara berkala oleh tim divisi multimedia.
+                </p>
+                <div class="pt-2 flex justify-center space-x-3">
+                    <a href="{{ route('editorial.structure') }}" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold transition">
+                        Lihat Divisi Multimedia
+                    </a>
+                </div>
+            </div>
+        @endif
     </section>
 
 </div>

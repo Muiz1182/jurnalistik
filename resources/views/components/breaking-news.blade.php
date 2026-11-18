@@ -5,7 +5,7 @@
     $customUrl = \App\Models\Setting::get('breaking_news_url', '#');
 @endphp
 
-@if($breakingItem || ($customBreakingActive && $customText))
+@if($breakingItem || ($customBreakingActive && !empty(trim($customText))))
     <div class="bg-gradient-to-r from-red-50 via-white to-red-50/50 border-b border-red-200/70 py-2.5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between gap-3">

@@ -174,10 +174,14 @@ class Article extends Model
         }
 
         if (config('database.default') === 'pgsql') {
-            return $query->whereRaw(
-                "to_tsvector('indonesian', coalesce(title, '') || ' ' || coalesce(subtitle, '') || ' ' || coalesce(excerpt, '') || ' ' || coalesce(content, '')) @@ plainto_tsquery('indonesian', ?)",
-                [$cleanTerm]
-            )->orderByRaw(
+            return $query->where(function ($q) use ($cleanTerm) {
+                $q->whereRaw(
+                    "to_tsvector('indonesian', coalesce(title, '') || ' ' || coalesce(subtitle, '') || ' ' || coalesce(excerpt, '') || ' ' || coalesce(content, '')) @@ plainto_tsquery('indonesian', ?)",
+                    [$cleanTerm]
+                )->orWhere('title', 'ilike', "%{$cleanTerm}%")
+                 ->orWhere('subtitle', 'ilike', "%{$cleanTerm}%")
+                 ->orWhere('excerpt', 'ilike', "%{$cleanTerm}%");
+            })->orderByRaw(
                 "ts_rank(to_tsvector('indonesian', coalesce(title, '') || ' ' || coalesce(subtitle, '') || ' ' || coalesce(excerpt, '') || ' ' || coalesce(content, '')), plainto_tsquery('indonesian', ?)) DESC",
                 [$cleanTerm]
             );
