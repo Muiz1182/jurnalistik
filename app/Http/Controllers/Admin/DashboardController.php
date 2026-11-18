@@ -22,11 +22,17 @@ class DashboardController extends Controller
             'total_articles' => Article::count(),
             'published_articles' => Article::where('status', 'published')->count(),
             'draft_articles' => Article::where('status', 'draft')->count(),
-            'under_review_articles' => Article::whereIn('status', ['submitted', 'under_review', 'revision_required'])->count(),
+            'submitted_to_kadiv' => Article::where('status', 'submitted')->count(),
+            'under_review_articles' => Article::whereIn('status', ['submitted', 'under_review'])->count(),
+            'revision_required' => Article::where('status', 'revision_required')->count(),
             'total_views' => (int) Article::sum('views_count'),
-            'total_reporters' => User::whereHas('role', fn($q) => $q->whereIn('slug', ['reporter', 'fotografer', 'editor']))->count(),
+            'total_reporters' => User::count(),
             'pending_comments' => Comment::where('status', 'pending')->count(),
             'my_articles_count' => Article::where('user_id', $user->id)->count(),
+            'my_drafts' => Article::where('user_id', $user->id)->where('status', 'draft')->count(),
+            'my_submitted' => Article::where('user_id', $user->id)->where('status', 'submitted')->count(),
+            'my_revisions' => Article::where('user_id', $user->id)->where('status', 'revision_required')->count(),
+            'my_published' => Article::where('user_id', $user->id)->where('status', 'published')->count(),
         ];
 
         // Popular Articles
@@ -36,10 +42,15 @@ class DashboardController extends Controller
             ->get();
 
         // Articles waiting for review / attention
-        $reviewQueue = Article::whereIn('status', ['submitted', 'under_review', 'revision_required'])
-            ->with(['author', 'category'])
-            ->latest('updated_at')
-            ->take(5)
+        $reviewQueueQuery = Article::whereIn('status', ['submitted', 'under_review', 'revision_required'])
+            ->with(['author', 'category']);
+
+        if ($user->hasRole('editor')) {
+            $reviewQueueQuery->where('user_id', $user->id);
+        }
+
+        $reviewQueue = $reviewQueueQuery->latest('updated_at')
+            ->take(6)
             ->get();
 
         // Recent System Activity

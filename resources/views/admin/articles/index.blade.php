@@ -10,25 +10,26 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         
         <!-- Status Filter Tabs -->
-        <div class="flex items-center space-x-1 overflow-x-auto pb-1 text-xs font-semibold">
+        <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs font-semibold">
             <a href="{{ route('admin.articles.index') }}" 
                class="px-3 py-1.5 rounded-lg transition {{ !request('status') ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
                 Semua ({{ $counts['all'] }})
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'draft']) }}" 
                class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'draft' ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
-                Draft ({{ $counts['draft'] }})
+                Draf Saya ({{ $counts['draft'] }})
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'submitted']) }}" 
-               class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'submitted' ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
-                Submitted ({{ $counts['submitted'] }})
+               class="px-3 py-1.5 rounded-lg transition flex items-center space-x-1 {{ request('status') === 'submitted' ? 'bg-amber-600 text-white font-bold shadow-xs' : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100' }}">
+                <span>Menunggu Kadiv</span>
+                <span class="px-1.5 py-0.2 rounded-full text-2xs bg-amber-800 text-white">{{ $counts['submitted'] }}</span>
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'under_review']) }}" 
                class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'under_review' ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
-                Review ({{ $counts['under_review'] }})
+                Ditinjau ({{ $counts['under_review'] }})
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'revision_required']) }}" 
-               class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'revision_required' ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
+               class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'revision_required' ? 'bg-rose-900 text-white font-bold' : 'bg-white text-rose-800 border border-rose-200 hover:bg-rose-50' }}">
                 Perlu Revisi ({{ $counts['revision_required'] }})
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'approved']) }}" 
@@ -36,7 +37,7 @@
                 Disetujui ({{ $counts['approved'] }})
             </a>
             <a href="{{ route('admin.articles.index', ['status' => 'published']) }}" 
-               class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'published' ? 'bg-blue-950 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
+               class="px-3 py-1.5 rounded-lg transition {{ request('status') === 'published' ? 'bg-emerald-800 text-white font-bold' : 'bg-white text-emerald-800 border border-emerald-200 hover:bg-emerald-50' }}">
                 Tayang ({{ $counts['published'] }})
             </a>
         </div>
@@ -148,20 +149,36 @@
                             <!-- Action Buttons -->
                             <td class="px-5 py-4 text-right">
                                 <div class="flex items-center justify-end space-x-2">
+                                    {{-- Quick workflow buttons --}}
+                                    @if(auth()->user()->hasRole('editor') && in_array($article->status, ['draft', 'revision_required']) && $article->user_id === auth()->id())
+                                        <form action="{{ route('admin.articles.submit', $article) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-bold rounded-md bg-amber-600 hover:bg-amber-700 text-white shadow-2xs transition" title="Ajukan naskah kepada Kadiv">
+                                                <i data-lucide="send" class="w-3 h-3"></i>
+                                                <span>Kirim ke Kadiv</span>
+                                            </button>
+                                        </form>
+                                    @elseif(auth()->user()->hasRole(['pemimpin-redaksi', 'super-admin']) && in_array($article->status, ['submitted', 'under_review']))
+                                        <a href="{{ route('admin.articles.edit', $article) }}" class="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-bold rounded-md bg-blue-950 hover:bg-blue-900 text-white shadow-2xs transition" title="Tinjau & Putuskan Naskah">
+                                            <i data-lucide="check-square" class="w-3 h-3 text-emerald-400"></i>
+                                            <span>Tinjau & Putuskan</span>
+                                        </a>
+                                    @endif
+
                                     @if($article->status === 'published')
-                                        <a href="{{ route('articles.show', $article->slug) }}" target="_blank" class="p-1.5 text-slate-400 hover:text-blue-900" title="Buka di Website">
+                                        <a href="{{ route('articles.show', $article->slug) }}" target="_blank" class="p-1.5 text-slate-400 hover:text-blue-900 rounded hover:bg-slate-100" title="Buka di Website">
                                             <i data-lucide="eye" class="w-4 h-4"></i>
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('admin.articles.edit', $article) }}" class="p-1.5 text-slate-600 hover:text-blue-900" title="Edit Naskah">
+                                    <a href="{{ route('admin.articles.edit', $article) }}" class="p-1.5 text-slate-600 hover:text-blue-900 rounded hover:bg-slate-100" title="Edit Naskah">
                                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                                     </a>
 
                                     <form action="{{ route('admin.articles.destroy', $article) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600" title="Hapus Artikel">
+                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50" title="Hapus Artikel">
                                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         </button>
                                     </form>

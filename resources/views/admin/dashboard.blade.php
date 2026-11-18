@@ -6,60 +6,157 @@
 @section('content')
 <div class="space-y-6">
 
+    <!-- Editorial Role Specific Notice -->
+    @if(auth()->user()->hasRole(['pemimpin-redaksi', 'super-admin']) && $stats['submitted_to_kadiv'] > 0)
+        <div class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl shadow-xs flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="text-sm font-bold text-amber-950">
+                        {{ $stats['submitted_to_kadiv'] }} Naskah Menunggu Persetujuan Kadiv
+                    </h3>
+                    <p class="text-xs text-amber-800">
+                        Editor telah mengajukan naskah untuk dipantau, ditinjau, dan disetujui untuk terbit ke website.
+                    </p>
+                </div>
+            </div>
+            <a href="{{ route('admin.articles.index', ['status' => 'submitted']) }}" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition shrink-0">
+                Tinjau Antrean
+            </a>
+        </div>
+    @elseif(auth()->user()->hasRole('editor') && $stats['my_revisions'] > 0)
+        <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl shadow-xs flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="text-sm font-bold text-rose-950">
+                        {{ $stats['my_revisions'] }} Naskah Memerlukan Revisi
+                    </h3>
+                    <p class="text-xs text-rose-800">
+                        Kadiv mengembalikan naskah dengan catatan perbaikan sebelum dapat disetujui.
+                    </p>
+                </div>
+            </div>
+            <a href="{{ route('admin.articles.index', ['status' => 'revision_required']) }}" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition shrink-0">
+                Lihat Catatan Kadiv
+            </a>
+        </div>
+    @endif
+
     <!-- 1. Real PostgreSQL Metrics Overview -->
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Artikel</span>
-                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center">
-                    <i data-lucide="newspaper" class="w-4 h-4"></i>
-                </span>
+        @if(auth()->user()->hasRole('editor'))
+            <!-- Editor View Cards -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Draf Naskah Saya</span>
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                        <i data-lucide="file-edit" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['my_drafts']) }}</span>
+                    <span class="text-xs text-slate-500 font-semibold">Sedang Ditulis</span>
+                </div>
             </div>
-            <div class="mt-2 flex items-baseline justify-between">
-                <span class="text-2xl font-black text-slate-900">{{ number_format($stats['total_articles']) }}</span>
-                <span class="text-xs text-emerald-600 font-semibold">{{ $stats['published_articles'] }} terbit</span>
-            </div>
-        </div>
 
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Menunggu Review</span>
-                <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                </span>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Diajukan ke Kadiv</span>
+                    <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['my_submitted']) }}</span>
+                    <span class="text-xs text-amber-700 font-semibold">Menunggu Putusan</span>
+                </div>
             </div>
-            <div class="mt-2 flex items-baseline justify-between">
-                <span class="text-2xl font-black text-slate-900">{{ number_format($stats['under_review_articles']) }}</span>
-                <span class="text-xs text-amber-700 font-semibold">Antrean Meja Editor</span>
-            </div>
-        </div>
 
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Draft Naskah</span>
-                <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
-                    <i data-lucide="file-edit" class="w-4 h-4"></i>
-                </span>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Perlu Revisi</span>
+                    <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['my_revisions']) }}</span>
+                    <span class="text-xs text-rose-700 font-semibold">Catatan dari Kadiv</span>
+                </div>
             </div>
-            <div class="mt-2 flex items-baseline justify-between">
-                <span class="text-2xl font-black text-slate-900">{{ number_format($stats['draft_articles']) }}</span>
-                <span class="text-xs text-slate-500 font-semibold">Belum diajukan</span>
-            </div>
-        </div>
 
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pembaca</span>
-                <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                </span>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Artikel Terbit</span>
+                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['my_published']) }}</span>
+                    <span class="text-xs text-emerald-600 font-semibold">Tayang di Website</span>
+                </div>
             </div>
-            <div class="mt-2 flex items-baseline justify-between">
-                <span class="text-2xl font-black text-slate-900">{{ number_format($stats['total_views']) }}</span>
-                <span class="text-xs text-slate-400 font-medium">Kunjungan Terdata</span>
+        @else
+            <!-- Kadiv & Super Admin View Cards -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Menunggu Kadiv</span>
+                    <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['submitted_to_kadiv']) }}</span>
+                    <span class="text-xs text-amber-700 font-semibold">Diajukan Editor</span>
+                </div>
             </div>
-        </div>
+
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sedang Ditinjau</span>
+                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['under_review_articles']) }}</span>
+                    <span class="text-xs text-blue-800 font-semibold">Meja Kadiv</span>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Perlu Revisi</span>
+                    <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['revision_required']) }}</span>
+                    <span class="text-xs text-rose-700 font-semibold">Diperbaiki Editor</span>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Artikel Terbit</span>
+                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <span class="text-2xl font-black text-slate-900">{{ number_format($stats['published_articles']) }}</span>
+                    <span class="text-xs text-emerald-600 font-semibold">Tayang Publik</span>
+                </div>
+            </div>
+        @endif
 
     </div>
 
@@ -71,9 +168,13 @@
             <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
                 <h2 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center">
                     <i data-lucide="git-pull-request" class="w-4 h-4 mr-2 text-blue-900"></i>
-                    Antrean Alur Redaksi
+                    @if(auth()->user()->hasRole('editor'))
+                        Naskah Saya Dalam Proses Redaksi
+                    @else
+                        Antrean Persetujuan Meja Kadiv
+                    @endif
                 </h2>
-                <a href="{{ route('admin.articles.index', ['status' => 'submitted']) }}" class="text-xs font-bold text-blue-900 hover:underline">
+                <a href="{{ route('admin.articles.index', ['status' => auth()->user()->hasRole('editor') ? 'submitted' : 'submitted']) }}" class="text-xs font-bold text-blue-900 hover:underline">
                     Lihat Semua
                 </a>
             </div>
@@ -83,8 +184,16 @@
                     <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-lg flex items-start justify-between gap-3">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
-                                <span class="text-2xs font-bold uppercase px-2 py-0.5 rounded {{ $article->status === 'submitted' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800' }}">
-                                    {{ str_replace('_', ' ', $article->status) }}
+                                <span class="text-2xs font-bold uppercase px-2 py-0.5 rounded {{ $article->status === 'submitted' ? 'bg-amber-100 text-amber-800' : ($article->status === 'revision_required' ? 'bg-rose-100 text-rose-800' : 'bg-blue-100 text-blue-800') }}">
+                                    @if($article->status === 'submitted')
+                                        Menunggu Putusan Kadiv
+                                    @elseif($article->status === 'revision_required')
+                                        Perlu Revisi Kadiv
+                                    @elseif($article->status === 'under_review')
+                                        Sedang Ditinjau Kadiv
+                                    @else
+                                        {{ str_replace('_', ' ', $article->status) }}
+                                    @endif
                                 </span>
                                 <span class="text-xs text-slate-400">&bull;</span>
                                 <span class="text-xs text-slate-500">{{ $article->category->name }}</span>
@@ -98,7 +207,11 @@
                         </div>
 
                         <a href="{{ route('admin.articles.edit', $article) }}" class="shrink-0 bg-blue-950 hover:bg-blue-900 text-white text-xs font-semibold px-3 py-1.5 rounded-md transition shadow-2xs">
-                            Periksa
+                            @if(auth()->user()->hasRole('editor'))
+                                Buka Naskah
+                            @else
+                                Tinjau & Putuskan
+                            @endif
                         </a>
                     </div>
                 @empty

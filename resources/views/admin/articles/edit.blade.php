@@ -55,30 +55,30 @@
         <!-- Workflow Decision Buttons -->
         <div class="flex flex-wrap items-center gap-2">
             
-            <!-- 1. Reporter action: Submit to Editor -->
+            <!-- 1. Editor action: Submit to Kadiv for Approval -->
             @if(in_array($article->status, ['draft', 'revision_required']))
                 <form action="{{ route('admin.articles.submit', $article) }}" method="POST">
                     @csrf
                     <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-2xs flex items-center">
                         <i data-lucide="send" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Ajukan ke Editor
+                        Minta Persetujuan Kadiv
                     </button>
                 </form>
             @endif
 
-            <!-- 2. Editor actions: Start Review -->
-            @if($article->status === 'submitted' && auth()->user()->canReviewArticles())
+            <!-- 2. Kadiv actions: Start Review -->
+            @if($article->status === 'submitted' && auth()->user()->canPublishArticles())
                 <form action="{{ route('admin.articles.review', $article) }}" method="POST">
                     @csrf
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-2xs flex items-center">
                         <i data-lucide="search" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Mulai Tinjau Naskah
+                        Tinjau Naskah
                     </button>
                 </form>
             @endif
 
-            <!-- 3. Editor actions: Request Revision -->
-            @if(in_array($article->status, ['submitted', 'under_review']) && auth()->user()->canReviewArticles())
+            <!-- 3. Kadiv actions: Request Revision -->
+            @if(in_array($article->status, ['submitted', 'under_review']) && auth()->user()->canPublishArticles())
                 <button type="button" 
                         @click="revisionModalOpen = true" 
                         class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-2xs flex items-center">
@@ -87,25 +87,14 @@
                 </button>
             @endif
 
-            <!-- 4. Editor action: Approve Article -->
-            @if(in_array($article->status, ['submitted', 'under_review']) && auth()->user()->canReviewArticles())
-                <form action="{{ route('admin.articles.approve', $article) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-2xs flex items-center">
-                        <i data-lucide="check" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Setujui Naskah (Approve)
-                    </button>
-                </form>
-            @endif
-
-            <!-- 5. Pemimpin Redaksi actions: Publish or Archive -->
+            <!-- 4. Kadiv actions: Approve & Publish Article -->
             @if(auth()->user()->canPublishArticles())
                 @if($article->status !== 'published')
                     <form action="{{ route('admin.articles.publish', $article) }}" method="POST">
                         @csrf
                         <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-2xs flex items-center">
                             <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1.5"></i>
-                            Terbitkan ke Publik
+                            Setujui & Terbitkan ke Website
                         </button>
                     </form>
                 @else

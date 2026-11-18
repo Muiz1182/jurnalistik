@@ -126,16 +126,19 @@
                         <span>Simpan sebagai Draft</span>
                     </button>
 
-                    <!-- Submit to Editor -->
+                    <!-- Submit to Kadiv for Approval -->
                     <button type="submit" 
                             name="action" 
                             value="submit" 
                             class="w-full bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold py-2.5 rounded-lg transition shadow-sm flex items-center justify-center">
                         <i data-lucide="send" class="w-4 h-4 mr-1.5 text-blue-300"></i>
-                        <span>Kirim ke Meja Editor</span>
+                        <span>Kirim Minta Persetujuan Kadiv</span>
                     </button>
+                    <p class="text-3xs text-slate-400 text-center italic">
+                        Naskah akan masuk ke antrean Kepala Divisi untuk ditinjau kelayakannya.
+                    </p>
 
-                    <!-- Direct Publish for Pemred / Super Admin -->
+                    <!-- Direct Publish for Kadiv / Super Admin -->
                     @if(auth()->user()->canPublishArticles())
                         <div class="pt-3 border-t border-slate-200">
                             <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">
@@ -150,7 +153,7 @@
                                     value="publish" 
                                     class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2.5 rounded-lg transition shadow-sm flex items-center justify-center">
                                 <i data-lucide="check-circle" class="w-4 h-4 mr-1.5 text-emerald-200"></i>
-                                <span>Terbitkan Sekarang</span>
+                                <span>Setujui & Terbitkan Sekarang</span>
                             </button>
                         </div>
                     @endif

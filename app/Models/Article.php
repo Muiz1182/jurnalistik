@@ -66,7 +66,7 @@ class Article extends Model
                 $baseSlug = Str::slug($article->title);
                 $slug = $baseSlug;
                 $counter = 1;
-                while (static::where('slug', $slug)->exists()) {
+                while (static::withTrashed()->where('slug', $slug)->exists()) {
                     $slug = "{$baseSlug}-{$counter}";
                     $counter++;
                 }

@@ -234,6 +234,34 @@ class ArticleController extends Controller
         $article->seo_title = $validated['seo_title'] ?? null;
         $article->meta_description = $validated['meta_description'] ?? null;
 
+        // Process workflow action if submitted from editor form
+        $action = $request->input('action');
+        if ($action === 'submit' && in_array($article->status, ['draft', 'revision_required'])) {
+            $article->status = 'submitted';
+            ArticleRevision::create([
+                'article_id' => $article->id,
+                'user_id' => $user->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'submitted',
+                'notes' => 'Editor mengajukan naskah kepada Kadiv untuk memohon persetujuan publikasi.',
+                'content_snapshot' => $article->content,
+            ]);
+            ActivityLog::log('submit_article', "Editor mengajukan naskah '{$article->title}' ke Kadiv untuk persetujuan.", $article);
+        } elseif ($action === 'publish' && $user->canPublishArticles()) {
+            $article->status = 'published';
+            $article->editor_id = $user->id;
+            $article->published_at = $article->published_at ?? now();
+            ArticleRevision::create([
+                'article_id' => $article->id,
+                'user_id' => $user->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'published',
+                'notes' => 'Kadiv menyetujui naskah dan menerbitkannya langsung ke website.',
+                'content_snapshot' => $article->content,
+            ]);
+            ActivityLog::log('publish_article', "Kadiv menyetujui dan menerbitkan naskah '{$article->title}'.", $article);
+        }
+
         $article->save();
 
         // Process tags
@@ -268,12 +296,12 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dihapus.');
     }
 
-    // Editorial Workflow Transitions
+    // Editorial Workflow Transitions (Editor -> Kadiv Approval)
 
     public function submitToEditor(Article $article): RedirectResponse
     {
         $user = auth()->user();
-        if ($article->user_id !== $user->id && !$user->isEditor()) {
+        if ($article->user_id !== $user->id && !$user->canPublishArticles()) {
             abort(403);
         }
 
@@ -285,19 +313,19 @@ class ArticleController extends Controller
             'user_id' => $user->id,
             'from_status' => $fromStatus,
             'to_status' => 'submitted',
-            'notes' => 'Reporter mengirimkan naskah untuk diperiksa oleh tim editor.',
+            'notes' => 'Editor mengajukan naskah kepada Kadiv untuk memohon persetujuan publikasi.',
         ]);
 
-        ActivityLog::log('workflow_submit', "Mengirimkan artikel '{$article->title}' ke meja redaksi.", $article);
+        ActivityLog::log('workflow_submit', "Mengajukan naskah '{$article->title}' untuk persetujuan Kadiv.", $article);
 
-        return back()->with('success', 'Naskah berhasil dikirimkan ke tim editor.');
+        return back()->with('success', 'Naskah berhasil diajukan ke Kadiv untuk meminta persetujuan penerbitan.');
     }
 
     public function review(Article $article): RedirectResponse
     {
         $user = auth()->user();
-        if (!$user->canReviewArticles()) {
-            abort(403, 'Hanya editor dan pemimpin redaksi yang dapat meninjau naskah.');
+        if (!$user->canPublishArticles() && !$user->canReviewArticles()) {
+            abort(403, 'Hanya Kadiv atau Super Admin yang berwenang meninjau naskah ini.');
         }
 
         $fromStatus = $article->status;
@@ -311,19 +339,19 @@ class ArticleController extends Controller
             'user_id' => $user->id,
             'from_status' => $fromStatus,
             'to_status' => 'under_review',
-            'notes' => "Editor {$user->name} mulai memeriksa kelayakan naskah.",
+            'notes' => "Kadiv {$user->name} mulai memeriksa kelayakan naskah untuk terbit.",
         ]);
 
         ActivityLog::log('workflow_review', "Mulai meninjau naskah '{$article->title}'.", $article);
 
-        return back()->with('success', 'Naskah kini berstatus sedang diperiksa (Under Review).');
+        return back()->with('success', 'Naskah kini sedang dalam peninjauan Kadiv.');
     }
 
     public function revisionRequired(Request $request, Article $article): RedirectResponse
     {
         $user = auth()->user();
-        if (!$user->canReviewArticles()) {
-            abort(403);
+        if (!$user->canPublishArticles()) {
+            abort(403, 'Hanya Kadiv atau Super Admin yang dapat meminta revisi kepada Editor.');
         }
 
         $request->validate(['notes' => 'required|string|min:5|max:1000']);
@@ -336,19 +364,19 @@ class ArticleController extends Controller
             'user_id' => $user->id,
             'from_status' => $fromStatus,
             'to_status' => 'revision_required',
-            'notes' => $request->notes,
+            'notes' => "Catatan Kadiv: " . $request->notes,
         ]);
 
-        ActivityLog::log('workflow_revision', "Mengembalikan naskah '{$article->title}' untuk revisi.", $article);
+        ActivityLog::log('workflow_revision', "Kadiv mengembalikan naskah '{$article->title}' kepada Editor untuk revisi.", $article);
 
-        return back()->with('success', 'Catatan revisi telah dikirimkan kepada reporter.');
+        return back()->with('success', 'Catatan revisi telah dikirimkan kepada Editor untuk diperbaiki.');
     }
 
     public function approve(Article $article): RedirectResponse
     {
         $user = auth()->user();
-        if (!$user->canReviewArticles()) {
-            abort(403);
+        if (!$user->canPublishArticles()) {
+            abort(403, 'Hanya Kadiv atau Super Admin yang berwenang menyetujui naskah.');
         }
 
         $fromStatus = $article->status;
@@ -362,19 +390,19 @@ class ArticleController extends Controller
             'user_id' => $user->id,
             'from_status' => $fromStatus,
             'to_status' => 'approved',
-            'notes' => 'Naskah disetujui secara teknis dan bahasa, menunggu persetujuan akhir Pemimpin Redaksi.',
+            'notes' => 'Naskah telah diverifikasi dan disetujui Kadiv, siap untuk diterbitkan.',
         ]);
 
-        ActivityLog::log('workflow_approve', "Menyetujui naskah '{$article->title}'.", $article);
+        ActivityLog::log('workflow_approve', "Kadiv menyetujui naskah '{$article->title}'.", $article);
 
-        return back()->with('success', 'Naskah disetujui (Approved). Siap untuk diterbitkan.');
+        return back()->with('success', 'Naskah disetujui Kadiv (Approved). Klik Terbitkan untuk menayangkan di website.');
     }
 
     public function publish(Request $request, Article $article): RedirectResponse
     {
         $user = auth()->user();
         if (!$user->canPublishArticles()) {
-            abort(403, 'Hanya Pemimpin Redaksi atau Super Admin yang berwenang menerbitkan berita.');
+            abort(403, 'Hanya Kadiv atau Super Admin yang berwenang menerbitkan berita ke publik.');
         }
 
         $fromStatus = $article->status;
@@ -392,12 +420,12 @@ class ArticleController extends Controller
             'user_id' => $user->id,
             'from_status' => $fromStatus,
             'to_status' => $isScheduled ? 'scheduled' : 'published',
-            'notes' => $isScheduled ? "Berita dijadwalkan terbit pada {$request->scheduled_for}." : 'Berita resmi diterbitkan ke publik.',
+            'notes' => $isScheduled ? "Kadiv menjadwalkan berita terbit pada {$request->scheduled_for}." : 'Kadiv menyetujui dan menerbitkan berita secara resmi ke website.',
         ]);
 
         ActivityLog::log('workflow_publish', "Menerbitkan berita '{$article->title}'.", $article);
 
-        return back()->with('success', $isScheduled ? 'Berita berhasil dijadwalkan.' : 'Berita resmi tayang di portal Jurnalistik SPELAND.');
+        return back()->with('success', $isScheduled ? 'Berita berhasil dijadwalkan oleh Kadiv.' : 'Berita resmi disetujui dan tayang di portal publik Jurnalistik SPELAND.');
     }
 
     public function archive(Article $article): RedirectResponse
