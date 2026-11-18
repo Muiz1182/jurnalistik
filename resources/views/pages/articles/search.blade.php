@@ -47,7 +47,7 @@
         @if(!empty($q))
             <div class="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-600 flex items-center justify-between">
                 <span>Ditemukan <strong>{{ $articles->total() }}</strong> hasil untuk kata kunci: <strong class="text-blue-950">&ldquo;{{ $q }}&rdquo;</strong></span>
-                <span class="text-slate-400">PostgreSQL Full Text Search Engine</span>
+                <span class="text-slate-400">Hasil Pencarian Terindeks</span>
             </div>
         @endif
     </div>

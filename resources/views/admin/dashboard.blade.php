@@ -47,7 +47,7 @@
         </div>
     @endif
 
-    <!-- 1. Real PostgreSQL Metrics Overview -->
+    <!-- 1. Metrics Overview -->
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         @if(auth()->user()->hasRole('editor'))
@@ -256,7 +256,7 @@
             </div>
 
             <div class="mt-6 pt-4 border-t border-slate-100 text-2xs text-slate-400 flex items-center justify-between">
-                <span>Database: PostgreSQL 18 (jurnalistik_speland)</span>
+                <span>Portal Berita Digital Resmi SPELAND</span>
                 <span class="text-emerald-600 font-semibold flex items-center">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1 inline-block"></span>
                     Sistem Aktif

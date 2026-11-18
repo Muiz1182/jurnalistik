@@ -215,11 +215,11 @@
                     </div>
                     <div class="flex items-center space-x-2.5">
                         <i data-lucide="git-branch" class="w-5 h-5 text-blue-400 shrink-0"></i>
-                        <span>Alur Redaksi Berlapis (Reporter &rarr; Editor)</span>
+                        <span>Alur Redaksi Berlapis (Editor &rarr; Kadiv)</span>
                     </div>
                     <div class="flex items-center space-x-2.5">
-                        <i data-lucide="database" class="w-5 h-5 text-purple-400 shrink-0"></i>
-                        <span>PostgreSQL 18 Full-Text Engine</span>
+                        <i data-lucide="archive" class="w-5 h-5 text-purple-400 shrink-0"></i>
+                        <span>Arsip Digital Terindeks Cepat</span>
                     </div>
                 </div>
             </div>

@@ -57,7 +57,7 @@
                     <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Tren Kunjungan Harian (14 Hari Terakhir)</h3>
                     <p class="text-2xs text-slate-400">Pola pembaca portal berita Jurnalistik SPELAND</p>
                 </div>
-                <span class="text-2xs font-mono font-bold bg-blue-50 text-blue-900 px-2.5 py-1 rounded">PostgreSQL Views Log</span>
+                <span class="text-2xs font-mono font-bold bg-blue-50 text-blue-900 px-2.5 py-1 rounded">Statistik Terdata</span>
             </div>
 
             <div class="h-64 relative">

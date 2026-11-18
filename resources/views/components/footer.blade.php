@@ -104,10 +104,10 @@
     <div class="bg-slate-900 border-t border-slate-800/80 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-2xs text-slate-500 gap-2">
             <p>
-                Hak Cipta &copy; {{ date('Y') }} <span class="text-slate-300 font-semibold">JURNALISTIK SPELAND</span> — SMP Negeri 9 Probolinggo. Seluruh hak cipta dilindungi undang-undang.
+                Hak Cipta &copy; {{ date('Y') }} <span class="text-slate-300 font-semibold">JURNALISTIK SPELAND</span> - SMP Negeri 9 Probolinggo. Seluruh hak cipta dilindungi undang-undang.
             </p>
-            <p class="font-mono text-3xs text-slate-500">
-                Edisi Pers Sekolah Modern &bull; PostgreSQL 18 Full-Text Engine
+            <p class="text-3xs text-slate-400">
+                Media Pers & Publikasi Digital Resmi Sekolah
             </p>
         </div>
     </div>

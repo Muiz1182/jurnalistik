@@ -136,7 +136,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-extrabold text-slate-900">Pencarian Arsip Berita SPELAND</h3>
-                        <p class="text-2xs text-slate-400">Didukung mesin pencari PostgreSQL Full-Text Search</p>
+                        <p class="text-2xs text-slate-400">Temukan liputan, artikel, dan dokumentasi sekolah</p>
                     </div>
                 </div>
                 <button @click="searchOpen = false" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition">
