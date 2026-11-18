@@ -11,11 +11,12 @@ class EditorialWorkflowLiveTest extends TestCase
 {
     public function test_reporter_can_create_draft_and_submit_to_editor(): void
     {
-        $reporter = User::where('username', 'reporter')->first();
+        $editor = User::where('username', 'editor')->first();
+        $kadiv = User::where('username', 'kadiv')->first();
         $category = Category::where('slug', 'kegiatan')->first();
 
-        // 1. Reporter stores a draft article
-        $response = $this->actingAs($reporter)->post('/admin/articles', [
+        // 1. Editor stores a draft article
+        $response = $this->actingAs($editor)->post('/admin/articles', [
             'title' => 'Liputan Kegiatan Bersih Sekolah Hari Jumat',
             'subtitle' => 'Kader Adiwiyata ajak seluruh kelas rawat kebun sekolah',
             'category_id' => $category->id,
@@ -30,31 +31,29 @@ class EditorialWorkflowLiveTest extends TestCase
         $this->assertNotNull($article);
         $this->assertEquals('draft', $article->status);
 
-        // 2. Reporter submits to editor
-        $submitResponse = $this->actingAs($reporter)->post("/admin/articles/{$article->id}/submit");
+        // 2. Submit to review
+        $submitResponse = $this->actingAs($editor)->post("/admin/articles/{$article->id}/submit");
         $submitResponse->assertStatus(302);
 
         $article->refresh();
         $this->assertEquals('submitted', $article->status);
 
-        // 3. Editor reviews article
-        $editor = User::where('username', 'editor')->first();
-        $reviewResponse = $this->actingAs($editor)->post("/admin/articles/{$article->id}/review");
+        // 3. Kadiv reviews article
+        $reviewResponse = $this->actingAs($kadiv)->post("/admin/articles/{$article->id}/review");
         $reviewResponse->assertStatus(302);
 
         $article->refresh();
         $this->assertEquals('under_review', $article->status);
 
-        // 4. Editor approves article
-        $approveResponse = $this->actingAs($editor)->post("/admin/articles/{$article->id}/approve");
+        // 4. Kadiv approves article
+        $approveResponse = $this->actingAs($kadiv)->post("/admin/articles/{$article->id}/approve");
         $approveResponse->assertStatus(302);
 
         $article->refresh();
         $this->assertEquals('approved', $article->status);
 
-        // 5. Pemimpin Redaksi publishes article
-        $pemred = User::where('username', 'pemred')->first();
-        $publishResponse = $this->actingAs($pemred)->post("/admin/articles/{$article->id}/publish");
+        // 5. Kadiv publishes article
+        $publishResponse = $this->actingAs($kadiv)->post("/admin/articles/{$article->id}/publish");
         $publishResponse->assertStatus(302);
 
         $article->refresh();

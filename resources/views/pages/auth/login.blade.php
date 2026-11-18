@@ -35,7 +35,7 @@
                        type="text" 
                        required 
                        value="{{ old('email') }}" 
-                       placeholder="admin@speland.sch.id / username" 
+                       placeholder="email@jurnalistik.mmaproduction.com / username" 
                        class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
             </div>
 
@@ -73,30 +73,6 @@
                 </a>
             </p>
         </div>
-
-        <!-- Development Quick Account Fill -->
-        @if(app()->environment('local'))
-            <div class="mt-6 pt-4 border-t border-dashed border-slate-200 bg-slate-50 p-3 rounded-lg text-xs" x-data>
-                <span class="font-bold text-slate-700 block mb-2 text-center text-xs">
-                    Akun Cepat (Development Demo):
-                </span>
-                <div class="grid grid-cols-2 gap-1.5 text-xs">
-                    <button type="button" @click="document.getElementById('email').value='admin@speland.sch.id'; document.getElementById('password').value='password123'" class="bg-white border border-slate-300 px-2 py-1 rounded hover:bg-slate-100 text-left truncate">
-                        <strong>Admin</strong> (Super Admin)
-                    </button>
-                    <button type="button" @click="document.getElementById('email').value='pemred@speland.sch.id'; document.getElementById('password').value='password123'" class="bg-white border border-slate-300 px-2 py-1 rounded hover:bg-slate-100 text-left truncate">
-                        <strong>Pemred</strong> (Pim. Redaksi)
-                    </button>
-                    <button type="button" @click="document.getElementById('email').value='editor@speland.sch.id'; document.getElementById('password').value='password123'" class="bg-white border border-slate-300 px-2 py-1 rounded hover:bg-slate-100 text-left truncate">
-                        <strong>Editor</strong> (Redaktur)
-                    </button>
-                    <button type="button" @click="document.getElementById('email').value='reporter@speland.sch.id'; document.getElementById('password').value='password123'" class="bg-white border border-slate-300 px-2 py-1 rounded hover:bg-slate-100 text-left truncate">
-                        <strong>Reporter</strong> (Jurnalis)
-                    </button>
-                </div>
-                <span class="block text-slate-400 text-2xs text-center mt-2 italic">Password default: password123</span>
-            </div>
-        @endif
 
     </div>
 </div>

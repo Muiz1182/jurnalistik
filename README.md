@@ -95,18 +95,15 @@ Berita Tampil di Halaman Publik
 
 ---
 
-## 4. Akun Default untuk Pengembangan
+## 4. Akun Resmi Pengguna Sistem
 
-Semua akun terdaftar menggunakan kata sandi: `password123`
+Berikut adalah 3 akun resmi yang terdaftar pada sistem:
 
-| Role | Username | Email | Kegunaan |
-|---|---|---|---|
-| **Super Admin** | `admin` | `admin@speland.sch.id` | Konfigurasi sistem, manajemen user, settings |
-| **Pemimpin Redaksi** | `pemred` | `pemred@speland.sch.id` | Penugasan liputan, persetujuan akhir & penerbitan naskah |
-| **Editor / Redaktur** | `editor` | `editor@speland.sch.id` | Penyuntingan teks, catatan revisi, moderasi komentar |
-| **Reporter** | `reporter` | `reporter@speland.sch.id` | Pembuatan naskah liputan dan pengiriman ke editor |
-| **Fotografer** | `fotografer` | `fotografer@speland.sch.id` | Manajemen album foto dokumentasi |
-| **Pembaca Terdaftar** | `pembaca` | `pembaca@speland.sch.id` | Pengujian bookmark dan interaksi komentar |
+| Peran (Role) | Email | Username | Kata Sandi (Password) | Hak Akses Utama |
+|---|---|---|---|---|
+| **Super Admin** | `admin@jurnalistik.mmaproduction.com` | `admin` | `admin1182` | Akses mutlak sistem, manajemen pengguna, konfigurasi website & audit log |
+| **Kadiv (Kepala Divisi)** | `kadiv@jurnalistik.mmaproduction.com` | `kadiv` | `kadiv1182` | Persetujuan akhir penerbitan naskah, breaking news, dan penugasan liputan |
+| **Editor** | `editor@jurnalistik.mmaproduction.com` | `editor` | `editor1182` | Penyuntingan naskah berita, kurasi tata bahasa, dan catatan revisi |
 
 ---
 

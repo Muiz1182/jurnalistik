@@ -51,70 +51,37 @@ class DatabaseSeeder extends Seeder
             $categories[$c['slug']] = Category::create($c);
         }
 
-        // 3. Editorial Team Users (Official Accounts)
-        $superAdmin = User::create([
-            'name' => 'Admin Utama SPELAND',
+        // 3. Official Accounts Requested
+        User::create([
+            'name' => 'Super Admin',
             'username' => 'admin',
-            'email' => 'admin@speland.sch.id',
-            'password' => Hash::make('password123'),
+            'email' => 'admin@jurnalistik.mmaproduction.com',
+            'password' => Hash::make('admin1182'),
             'role_id' => $roles['super-admin']->id,
-            'title' => 'Koordinator Sistem Informasi',
-            'bio' => 'Pengelola sistem digital dan infrastruktur media SMP Negeri 9 Probolinggo.',
+            'title' => 'Super Administrator',
+            'bio' => 'Pengelola sistem digital dan infrastruktur media pers Jurnalistik SPELAND.',
             'status' => 'active',
         ]);
 
-        $pemred = User::create([
-            'name' => 'Ahmad Fauzi',
-            'username' => 'pemred',
-            'email' => 'pemred@speland.sch.id',
-            'password' => Hash::make('password123'),
+        User::create([
+            'name' => 'Kepala Divisi Redaksi',
+            'username' => 'kadiv',
+            'email' => 'kadiv@jurnalistik.mmaproduction.com',
+            'password' => Hash::make('kadiv1182'),
             'role_id' => $roles['pemimpin-redaksi']->id,
-            'title' => 'Pemimpin Redaksi',
-            'bio' => 'Pemimpin Redaksi Jurnalistik SPELAND periode 2026/2027.',
+            'title' => 'Kepala Divisi (Kadiv)',
+            'bio' => 'Kepala Divisi dan penanggung jawab penerbitan berita Jurnalistik SPELAND.',
             'status' => 'active',
         ]);
 
-        $editor = User::create([
-            'name' => 'Siti Rahmawati',
+        User::create([
+            'name' => 'Editor Redaksi',
             'username' => 'editor',
-            'email' => 'editor@speland.sch.id',
-            'password' => Hash::make('password123'),
+            'email' => 'editor@jurnalistik.mmaproduction.com',
+            'password' => Hash::make('editor1182'),
             'role_id' => $roles['editor']->id,
-            'title' => 'Redaktur Berita',
-            'bio' => 'Editor naskah berita kegiatan dan artikel opini murid.',
-            'status' => 'active',
-        ]);
-
-        $reporter = User::create([
-            'name' => 'Rizky Pratama',
-            'username' => 'reporter',
-            'email' => 'reporter@speland.sch.id',
-            'password' => Hash::make('password123'),
-            'role_id' => $roles['reporter']->id,
-            'title' => 'Reporter Lapangan',
-            'bio' => 'Jurnalis pelajar peliput kegiatan ekstrakurikuler dan prestasi murid.',
-            'status' => 'active',
-        ]);
-
-        $fotografer = User::create([
-            'name' => 'Dinda Permata',
-            'username' => 'fotografer',
-            'email' => 'fotografer@speland.sch.id',
-            'password' => Hash::make('password123'),
-            'role_id' => $roles['fotografer']->id,
-            'title' => 'Fotografer Redaksi',
-            'bio' => 'Koordinator divisi dokumentasi foto dan visual pers sekolah.',
-            'status' => 'active',
-        ]);
-
-        $pembaca = User::create([
-            'name' => 'Budi Santoso',
-            'username' => 'pembaca',
-            'email' => 'pembaca@speland.sch.id',
-            'password' => Hash::make('password123'),
-            'role_id' => $roles['pembaca']->id,
-            'title' => 'Alumni & Pembaca',
-            'bio' => 'Pemerhati karya jurnalistik pelajar Kota Probolinggo.',
+            'title' => 'Editor Berita',
+            'bio' => 'Penyunting naskah, pemeriksa fakta, dan tata bahasa jurnalistik.',
             'status' => 'active',
         ]);
 
