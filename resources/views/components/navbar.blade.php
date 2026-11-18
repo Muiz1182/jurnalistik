@@ -16,22 +16,22 @@
 @endphp
 
 <!-- Desktop Navigation Bar -->
-<nav class="bg-blue-950 text-white shadow-md sticky top-0 z-40 border-b border-blue-900">
+<nav class="bg-slate-950 text-white shadow-md sticky top-0 z-40 border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="hidden lg:flex items-center justify-between">
+        <div class="hidden lg:flex items-center justify-between whitespace-nowrap">
             
             <!-- Left Main Category Links -->
-            <ul class="flex items-center space-x-0.5 text-xs font-bold tracking-wide">
+            <ul class="flex items-center space-x-1 text-xs font-bold tracking-wide">
                 <li>
                     <a href="{{ route('home') }}" 
-                       class="inline-flex items-center py-3 px-3.5 hover:bg-blue-900/80 transition {{ request()->routeIs('home') ? 'bg-blue-900 text-white border-b-2 border-red-500' : 'text-slate-200' }}">
-                        <i data-lucide="home" class="w-3.5 h-3.5 mr-1.5 opacity-80"></i>
+                       class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 transition {{ request()->routeIs('home') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                        <i data-lucide="home" class="w-3.5 h-3.5 mr-1.5 opacity-90 text-blue-400"></i>
                         <span>BERANDA</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('articles.index') }}" 
-                       class="inline-block py-3 px-3.5 hover:bg-blue-900/80 transition {{ request()->routeIs('articles.index') ? 'bg-blue-900 text-white border-b-2 border-red-500' : 'text-slate-200' }}">
+                       class="inline-block py-3.5 px-3 hover:bg-slate-900 transition {{ request()->routeIs('articles.index') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
                         SEMUA BERITA
                     </a>
                 </li>
@@ -40,7 +40,7 @@
                 @foreach($primaryCategories as $navCat)
                     <li>
                         <a href="{{ route('articles.category', $navCat->slug) }}" 
-                           class="inline-block py-3 px-3 hover:bg-blue-900/80 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-blue-900 text-white border-b-2 border-red-500' : 'text-slate-200' }}">
+                           class="inline-block py-3.5 px-3 hover:bg-slate-900 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
                             {{ strtoupper($navCat->name) }}
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <!-- More Categories Dropdown -->
                 @if($otherCategories->isNotEmpty())
                     <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                        <button class="inline-flex items-center py-3 px-3 hover:bg-blue-900/80 text-slate-200 transition focus:outline-none font-bold">
+                        <button class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
                             <span>RUBRIK LAINNYA</span>
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 opacity-70"></i>
                         </button>
@@ -73,7 +73,7 @@
 
                 <!-- Multimedia Dropdown -->
                 <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button class="inline-flex items-center py-3 px-3 hover:bg-blue-900/80 text-slate-200 transition focus:outline-none font-bold">
+                    <button class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
                         <span>MULTIMEDIA</span>
                         <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 opacity-70"></i>
                     </button>
