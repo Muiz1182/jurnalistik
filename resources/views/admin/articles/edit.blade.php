@@ -10,6 +10,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         tinymce.init({
             selector: '#article-content',
+            license_key: 'gpl',
             height: 520,
             menubar: false,
             plugins: 'lists link image media table code wordcount',
