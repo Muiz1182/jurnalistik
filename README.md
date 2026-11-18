@@ -95,15 +95,17 @@ Berita Tampil di Halaman Publik
 
 ---
 
-## 4. Akun Resmi Pengguna Sistem
+## 4. Struktur Peran & Hak Akses Redaksi
 
-Berikut adalah 3 akun resmi yang terdaftar pada sistem:
+Sistem JURNALISTIK SPELAND menerapkan kontrol akses berbasis peran (*Role-Based Access Control*) yang ketat dengan tiga peran operasional utama:
 
-| Peran (Role) | Email | Username | Kata Sandi (Password) | Hak Akses Utama |
-|---|---|---|---|---|
-| **Super Admin** | `admin@jurnalistik.mmaproduction.com` | `admin` | `admin1182` | Akses mutlak sistem, manajemen pengguna, konfigurasi website & audit log |
-| **Kadiv (Kepala Divisi)** | `kadiv@jurnalistik.mmaproduction.com` | `kadiv` | `kadiv1182` | Persetujuan akhir penerbitan naskah, breaking news, dan penugasan liputan |
-| **Editor** | `editor@jurnalistik.mmaproduction.com` | `editor` | `editor1182` | Penyuntingan naskah berita, kurasi tata bahasa, dan catatan revisi |
+| Peran (Role) | Lingkup Wewenang & Tanggung Jawab |
+|---|---|
+| **Super Administrator** | Akses penuh konfigurasi sistem, manajemen akun pengguna redaksi, integrasi layanan, serta pemantauan rekam jejak aktivitas (*activity & audit logs*). |
+| **Kepala Divisi Redaksi (Kadiv)** | Otoritas penentu kelayakan publikasi naskah (*final approval*), penerbitan *breaking news*, kurasi sorotan utama, dan manajemen penugasan liputan jurnalis. |
+| **Editor Redaksi** | Menulis dan menyunting naskah berita, memverifikasi akurasi fakta dan ejaan bahasa, serta memberikan catatan revisi terstruktur. |
+
+> **Catatan Keamanan**: Kredensial akun pengguna redaksi diinisialisasi secara aman melalui seeder database (`php artisan db:seed`) atau dapat dikelola langsung oleh Super Administrator melalui Meja Redaksi demi menjaga privasi dan integritas data sistem.
 
 ---
 
@@ -119,8 +121,8 @@ Berikut adalah 3 akun resmi yang terdaftar pada sistem:
 
 1. **Clone repositori dan masuk ke direktori proyek**:
    ```bash
-   git clone <repo-url>
-   cd JURNALISTIK-SPELAND
+   git clone https://github.com/Muiz1182/jurnalistik.git
+   cd jurnalistik
    ```
 
 2. **Instal dependensi PHP & Node.js**:
