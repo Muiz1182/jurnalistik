@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "alpinejs": "^3.17.5",
-        "lucide": "^1.74.0"
+        "lucide": "^1.74.0",
+        "tinymce": "^8.10.2"
     }
 }

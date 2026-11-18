@@ -4,8 +4,8 @@
 @section('page_title', 'Penyuntingan & Alur Redaksi Naskah')
 
 @push('styles')
-<!-- TinyMCE Rich Text Editor -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- TinyMCE Rich Text Editor (Self-Hosted Community Edition - No API Key Required) -->
+<script src="{{ asset('vendor/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         tinymce.init({
@@ -15,7 +15,8 @@
             plugins: 'lists link image media table code wordcount',
             toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist blockquote | link image media | code',
             content_style: "body { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; line-height: 1.7; color: #1e293b; }",
-            branding: false
+            branding: false,
+            promotion: false
         });
     });
 </script>
