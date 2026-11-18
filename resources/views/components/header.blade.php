@@ -1,11 +1,9 @@
-<header class="bg-white border-b-2 border-slate-900/90 py-5 sm:py-6 relative">
+<header class="bg-white border-b border-slate-200/90 py-4 sm:py-5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Top Editorial Row -->
         <div class="flex items-center justify-between gap-4">
             
-            <!-- Left Info / Mobile Menu Trigger -->
-            <div class="flex items-center space-x-3">
+            <!-- Left: Brand Masthead & Mobile Menu Trigger -->
+            <div class="flex items-center space-x-3.5">
                 <button @click="mobileMenuOpen = !mobileMenuOpen" 
                         type="button" 
                         class="p-2 text-slate-800 hover:text-blue-950 focus:outline-none focus:ring-2 focus:ring-blue-900 rounded-lg bg-slate-100 border border-slate-200 lg:hidden"
@@ -13,45 +11,39 @@
                     <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
 
-                <!-- Hidden on mobile, prominent on desktop: Editorial Stamp -->
-                <div class="hidden lg:flex flex-col text-left border-l-2 border-slate-900 pl-3">
-                    <span class="text-3xs uppercase tracking-widest font-black text-slate-900">PERS PELAJAR RESMI</span>
-                    <span class="text-2xs text-slate-500 font-medium font-serif italic">Independen, Edukatif & Beretika</span>
-                </div>
-            </div>
+                <a href="{{ route('home') }}" class="flex items-center space-x-3.5 group">
+                    <!-- Bespoke Emblem -->
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-950 text-white flex flex-col items-center justify-center border-b-2 border-red-600 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                        <span class="font-serif font-black text-lg sm:text-xl leading-none">JS</span>
+                        <span class="text-3xs font-extrabold uppercase tracking-widest text-red-400 scale-75 -mt-0.5">PRESS</span>
+                    </div>
 
-            <!-- Central Editorial Masthead -->
-            <div class="text-center flex-1 max-w-2xl px-2">
-                <a href="{{ route('home') }}" class="inline-block group">
-                    <div class="flex items-center justify-center space-x-2.5 sm:space-x-3 mb-1">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-slate-950 text-white flex items-center justify-center font-serif font-black text-lg sm:text-xl border-b-2 border-red-600 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                            JS
-                        </div>
-                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-slate-950 font-sans group-hover:text-blue-950 transition uppercase">
+                    <!-- Title & Tagline -->
+                    <div>
+                        <div class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-slate-950 font-sans group-hover:text-blue-950 transition uppercase leading-none">
                             JURNALISTIK <span class="text-blue-900">SPELAND</span>
-                        </h1>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
+                            <span class="text-3xs sm:text-2xs font-extrabold uppercase tracking-wider text-red-600">
+                                Portal Berita Resmi SMP Negeri 9 Probolinggo
+                            </span>
+                            <span class="text-slate-300 hidden md:inline">&bull;</span>
+                            <span class="text-3xs sm:text-2xs text-slate-500 font-serif italic hidden md:inline">
+                                &ldquo;Mengabarkan Fakta, Menyuarakan Cerita&rdquo;
+                            </span>
+                        </div>
                     </div>
                 </a>
-                
-                <div class="flex items-center justify-center space-x-2 text-2xs sm:text-xs">
-                    <span class="font-extrabold uppercase tracking-wider text-red-600">
-                        SMP NEGERI 9 PROBOLINGGO
-                    </span>
-                    <span class="text-slate-300 font-serif">&bull;</span>
-                    <span class="text-slate-600 font-serif italic hidden sm:inline">
-                        &ldquo;Mengabarkan Fakta, Menyuarakan Cerita&rdquo;
-                    </span>
-                </div>
             </div>
 
-            <!-- Right Utilities (Search Trigger & Live Podcast / Editorial CTA) -->
+            <!-- Right Utilities (Search Trigger & Live Podcast Button) -->
             <div class="flex items-center space-x-2.5 sm:space-x-3 shrink-0">
                 <!-- Search Button with Keyboard Shortcut -->
                 <button @click="searchOpen = true" 
                         type="button" 
                         class="flex items-center bg-slate-50 hover:bg-slate-100 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition border border-slate-200 shadow-2xs group"
                         title="Pencarian Cepat">
-                    <i data-lucide="search" class="w-4 h-4 text-slate-400 group-hover:text-blue-900 transition sm:mr-2"></i>
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 group-hover:text-blue-900 transition mr-2"></i>
                     <span class="hidden sm:inline">Cari Berita...</span>
                     <kbd class="hidden md:inline-block ml-2.5 px-1.5 py-0.5 bg-white border border-slate-200 text-slate-400 rounded text-3xs font-mono font-bold shadow-2xs">Ctrl K</kbd>
                 </button>

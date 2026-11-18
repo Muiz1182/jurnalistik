@@ -3,16 +3,31 @@
         ->orderBy('order')
         ->get();
 
-    // Primary categories to show directly on the main bar
-    $primarySlugs = ['pendidikan', 'prestasi', 'kegiatan', 'adiwiyata-lingkungan', 'lingkungan', 'opini'];
+    // Primary rubrics shown directly on the desktop navbar
+    $primarySlugs = ['pendidikan', 'prestasi', 'kegiatan', 'opini'];
     $primaryCategories = $allCategories->filter(function($c) use ($primarySlugs) {
-        return in_array($c->slug, $primarySlugs) || $c->order <= 5;
-    })->take(5);
+        return in_array($c->slug, $primarySlugs);
+    });
 
-    // Other categories in the "Kanal Lainnya" dropdown
+    // If less than 4 found, take top 4
+    if ($primaryCategories->count() < 4) {
+        $primaryCategories = $allCategories->take(4);
+    }
+
+    // Other categories in the "Rubrik Lainnya" dropdown
     $otherCategories = $allCategories->filter(function($c) use ($primaryCategories) {
         return !$primaryCategories->contains('id', $c->id);
     });
+
+    // Short display label helper
+    $shortLabels = [
+        'kegiatan' => 'KEGIATAN',
+        'pendidikan' => 'PENDIDIKAN',
+        'prestasi' => 'PRESTASI',
+        'opini' => 'OPINI',
+        'lingkungan' => 'LINGKUNGAN',
+        'sekolah' => 'SEKOLAH',
+    ];
 @endphp
 
 <!-- Desktop Navigation Bar -->
@@ -24,14 +39,14 @@
             <ul class="flex items-center space-x-1 text-xs font-bold tracking-wide">
                 <li>
                     <a href="{{ route('home') }}" 
-                       class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 transition {{ request()->routeIs('home') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                       class="inline-flex items-center py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->routeIs('home') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
                         <i data-lucide="home" class="w-3.5 h-3.5 mr-1.5 opacity-90 text-blue-400"></i>
                         <span>BERANDA</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('articles.index') }}" 
-                       class="inline-block py-3.5 px-3 hover:bg-slate-900 transition {{ request()->routeIs('articles.index') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                       class="inline-block py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->routeIs('articles.index') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
                         SEMUA BERITA
                     </a>
                 </li>
@@ -40,8 +55,8 @@
                 @foreach($primaryCategories as $navCat)
                     <li>
                         <a href="{{ route('articles.category', $navCat->slug) }}" 
-                           class="inline-block py-3.5 px-3 hover:bg-slate-900 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
-                            {{ strtoupper($navCat->name) }}
+                           class="inline-block py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                            {{ $shortLabels[$navCat->slug] ?? strtoupper($navCat->name) }}
                         </a>
                     </li>
                 @endforeach
@@ -49,7 +64,7 @@
                 <!-- More Categories Dropdown -->
                 @if($otherCategories->isNotEmpty())
                     <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                        <button class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
+                        <button class="inline-flex items-center py-3.5 px-3.5 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
                             <span>RUBRIK LAINNYA</span>
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 opacity-70"></i>
                         </button>
@@ -58,7 +73,7 @@
                              x-transition:enter="transition ease-out duration-150"
                              x-transition:enter-start="opacity-0 translate-y-1"
                              x-transition:enter-end="opacity-100 translate-y-0"
-                             class="absolute left-0 mt-0 w-56 bg-white text-slate-800 rounded-b-xl shadow-2xl py-2 border border-slate-100 z-50 divide-y divide-slate-100">
+                             class="absolute left-0 mt-0 w-60 bg-white text-slate-800 rounded-b-xl shadow-2xl py-2 border border-slate-100 z-50 divide-y divide-slate-100">
                             <div class="py-1">
                                 @foreach($otherCategories as $otherCat)
                                     <a href="{{ route('articles.category', $otherCat->slug) }}" class="flex items-center justify-between px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900 transition">
