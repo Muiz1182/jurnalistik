@@ -16,7 +16,7 @@
         </p>
     </div>
 
-    @foreach($members as $division => $divisionMembers)
+    @forelse($members as $division => $divisionMembers)
         <section class="space-y-4">
             <h2 class="text-lg font-extrabold text-blue-950 uppercase tracking-wider border-b-2 border-blue-900 pb-2 flex items-center">
                 <i data-lucide="users" class="w-5 h-5 mr-2 text-blue-900"></i>
@@ -38,7 +38,17 @@
                 @endforeach
             </div>
         </section>
-    @endforeach
+    @empty
+        <div class="bg-white border border-slate-200 rounded-xl p-10 text-center text-slate-500 space-y-2">
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-900 flex items-center justify-center mx-auto">
+                <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-sm text-slate-800">Susunan Redaksi Dalam Tahap Pembaruan</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">
+                Daftar pengurus dan struktur tim Jurnalistik SMP Negeri 9 Probolinggo akan segera diperbarui secara resmi.
+            </p>
+        </div>
+    @endforelse
 
 </div>
 @endsection

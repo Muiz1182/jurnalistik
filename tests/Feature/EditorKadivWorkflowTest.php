@@ -98,6 +98,10 @@ class EditorKadivWorkflowTest extends TestCase
         $publicResponse = $this->get(route('articles.show', $article->slug));
         $publicResponse->assertStatus(200);
         $publicResponse->assertSee('Liputan Kegiatan P5 Speland 2026 Lengkap');
+
+        // Clean up test article so database remains clean
+        $article->revisions()->delete();
+        $article->forceDelete();
     }
 
     public function test_role_access_boundaries_for_editor_kadiv_and_super_admin(): void

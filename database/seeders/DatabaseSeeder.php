@@ -40,10 +40,9 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Adiwiyata & Lingkungan', 'slug' => 'lingkungan', 'color' => '#15803D', 'order' => 4, 'description' => 'Gerakan peduli sampah, kebun sekolah, biopori, dan konservasi hijau'],
             ['name' => 'Sekolah', 'slug' => 'sekolah', 'color' => '#2563EB', 'order' => 5, 'description' => 'Profil fasilitas, sarana prasarana, dan perkembangan lingkungan belajar'],
             ['name' => 'Teknologi', 'slug' => 'teknologi', 'color' => '#0284C7', 'order' => 6, 'description' => 'Inovasi laboratorium komputer, pembelajaran digital, dan literasi internet sehat'],
-            ['name' => 'Organisasi', 'slug' => 'organisasi', 'color' => '#6D28D9', 'order' => 7, 'description' => 'Kiprah OSIS, Pramuka, PMR, Paskibra, dan ekstrakurikuler sekolah'],
-            ['name' => 'Literasi', 'slug' => 'literasi', 'color' => '#BE185D', 'order' => 8, 'description' => 'Gerakan membaca, resensi buku perpustakaan, dan karya puisi murid'],
-            ['name' => 'Opini', 'slug' => 'opini', 'color' => '#C2410C', 'order' => 9, 'description' => 'Sudut pandang murid, gagasan kritis guru, dan esai pendidikan'],
-            ['name' => 'Informasi Sekolah', 'slug' => 'informasi-sekolah', 'color' => '#334155', 'order' => 10, 'description' => 'Pengumuman resmi kedinasan, jadwal akademik, dan agenda resmi'],
+            ['name' => 'Literasi', 'slug' => 'literasi', 'color' => '#BE185D', 'order' => 7, 'description' => 'Gerakan membaca, resensi buku perpustakaan, dan karya puisi murid'],
+            ['name' => 'Opini', 'slug' => 'opini', 'color' => '#C2410C', 'order' => 8, 'description' => 'Sudut pandang murid, gagasan kritis guru, dan esai pendidikan'],
+            ['name' => 'Informasi Sekolah', 'slug' => 'informasi-sekolah', 'color' => '#334155', 'order' => 9, 'description' => 'Pengumuman resmi kedinasan, jadwal akademik, dan agenda resmi'],
         ];
 
         $categories = [];
@@ -103,8 +102,8 @@ class DatabaseSeeder extends Seeder
             'social_instagram' => 'https://instagram.com/smpn9probolinggo_official',
             'social_youtube' => 'https://youtube.com/@smpnegeri9probolinggo',
             'social_facebook' => 'https://facebook.com/smpnegeri9probolinggo',
-            'chief_editor' => 'Ahmad Fauzi',
-            'advisor_name' => 'Drs. H. Bambang Wahyudi, M.Pd.',
+            'chief_editor' => '-',
+            'advisor_name' => '-',
             'about_brief' => 'Jurnalistik SPELAND merupakan media informasi, komunikasi, dan publikasi digital resmi SMP Negeri 9 Probolinggo yang dikelola langsung oleh tim jurnalis pelajar sekolah.',
             'editorial_policy' => 'Redaksi Jurnalistik SPELAND menjunjung tinggi independensi fakta, etika pemberitaan ramah anak, ketepatan verifikasi, dan keberpihakan pada nilai-nilai pendidikan karakter.',
             'breaking_news_active' => '0',
@@ -114,23 +113,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($settings as $key => $val) {
             Setting::set($key, $val);
-        }
-
-        // 6. Editorial Members Structure (Struktur Redaksi Resmi SMPN 9 Probolinggo)
-        $members = [
-            ['name' => 'Drs. H. Bambang Wahyudi, M.Pd.', 'position' => 'Kepala Sekolah & Pembina Utama', 'division' => 'Pembina', 'class_or_grade' => 'Kepala Sekolah', 'order' => 1],
-            ['name' => 'Endang Sulistyo, S.Pd.', 'position' => 'Pembina Teknis Jurnalistik', 'division' => 'Pembina', 'class_or_grade' => 'Guru Bahasa Indonesia', 'order' => 2],
-            ['name' => 'Ahmad Fauzi', 'position' => 'Pemimpin Redaksi', 'division' => 'Pimpinan', 'class_or_grade' => 'Kelas 9A', 'order' => 3],
-            ['name' => 'Nadia Salsabila', 'position' => 'Wakil Pemimpin Redaksi', 'division' => 'Pimpinan', 'class_or_grade' => 'Kelas 9B', 'order' => 4],
-            ['name' => 'Siti Rahmawati', 'position' => 'Redaktur Berita & Bahasa', 'division' => 'Dewan Redaksi', 'class_or_grade' => 'Kelas 9C', 'order' => 5],
-            ['name' => 'Rizky Pratama', 'position' => 'Koordinator Liputan & Reporter', 'division' => 'Reporter', 'class_or_grade' => 'Kelas 8B', 'order' => 6],
-            ['name' => 'Zahra Anindya', 'position' => 'Reporter Pendidikan & Opini', 'division' => 'Reporter', 'class_or_grade' => 'Kelas 8C', 'order' => 7],
-            ['name' => 'Dinda Permata', 'position' => 'Kepala Divisi Fotografi', 'division' => 'Multimedia', 'class_or_grade' => 'Kelas 8A', 'order' => 8],
-            ['name' => 'Muhammad Ilham', 'position' => 'Videografer & Produser Podcast', 'division' => 'Multimedia', 'class_or_grade' => 'Kelas 9D', 'order' => 9],
-        ];
-
-        foreach ($members as $m) {
-            EditorialMember::create($m);
         }
     }
 }
