@@ -16,18 +16,29 @@
         </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse($articles as $article)
-            <x-article-card :article="$article" />
-        @empty
-            <div class="col-span-3 py-12 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                <p class="text-xs text-slate-500 italic">Belum ada berita terbaru.</p>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Main Articles (8 cols) -->
+        <div class="lg:col-span-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @forelse($articles as $article)
+                    <x-article-card :article="$article" />
+                @empty
+                    <div class="col-span-2 py-12 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                        <i data-lucide="newspaper" class="w-10 h-10 text-slate-400 mx-auto mb-2"></i>
+                        <p class="text-xs text-slate-500 italic">Belum ada berita terbaru saat ini.</p>
+                    </div>
+                @endforelse
             </div>
-        @endforelse
-    </div>
 
-    <div class="mt-8">
-        {{ $articles->links() }}
+            <div class="mt-8">
+                {{ $articles->links() }}
+            </div>
+        </div>
+
+        <!-- Consistent Right Sidebar (4 cols) -->
+        <aside class="lg:col-span-4 space-y-6">
+            <x-sidebar-popular :popularArticles="$popularArticles" />
+        </aside>
     </div>
 
 </div>

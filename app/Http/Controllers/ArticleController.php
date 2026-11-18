@@ -110,7 +110,9 @@ class ArticleController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
-        return view('pages.articles.latest', compact('articles'));
+        $popularArticles = Article::popular(30)->take(5)->get();
+
+        return view('pages.articles.latest', compact('articles', 'popularArticles'));
     }
 
     public function opinion(): View
@@ -170,7 +172,9 @@ class ArticleController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return view('pages.articles.archive', compact('articles', 'year', 'month'));
+        $popularArticles = Article::popular(30)->take(5)->get();
+
+        return view('pages.articles.archive', compact('articles', 'popularArticles', 'year', 'month'));
     }
 
     public function toggleBookmark(Request $request, Article $article): JsonResponse|RedirectResponse
