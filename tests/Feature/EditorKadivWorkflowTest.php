@@ -99,4 +99,59 @@ class EditorKadivWorkflowTest extends TestCase
         $publicResponse->assertStatus(200);
         $publicResponse->assertSee('Liputan Kegiatan P5 Speland 2026 Lengkap');
     }
+
+    public function test_role_access_boundaries_for_editor_kadiv_and_super_admin(): void
+    {
+        $admin = User::where('email', 'admin@jurnalistik.mmaproduction.com')->first();
+        $kadiv = User::where('email', 'kadiv@jurnalistik.mmaproduction.com')->first();
+        $editor = User::where('email', 'editor@jurnalistik.mmaproduction.com')->first();
+
+        // 1. Editor Access Checks
+        $this->actingAs($editor);
+
+        // Allowed for Editor
+        $this->get(route('admin.dashboard'))->assertStatus(200);
+        $this->get(route('admin.articles.index'))->assertStatus(200);
+        $this->get(route('admin.articles.create'))->assertStatus(200);
+        $this->get(route('admin.media.index'))->assertStatus(200);
+        $this->get(route('admin.galleries.index'))->assertStatus(200);
+        $this->get(route('admin.assignments.index'))->assertStatus(200);
+
+        // Forbidden for Editor (Must be 403)
+        $this->get(route('admin.categories.index'))->assertStatus(403);
+        $this->get(route('admin.tags.index'))->assertStatus(403);
+        $this->get(route('admin.comments.index'))->assertStatus(403);
+        $this->get(route('admin.analytics.index'))->assertStatus(403);
+        $this->get(route('admin.special-coverages.index'))->assertStatus(403);
+        $this->get(route('admin.videos.index'))->assertStatus(403);
+        $this->get(route('admin.podcasts.index'))->assertStatus(403);
+        $this->get(route('admin.editorial-members.index'))->assertStatus(403);
+        $this->get(route('admin.users.index'))->assertStatus(403);
+        $this->get(route('admin.settings.index'))->assertStatus(403);
+        $this->get(route('admin.activity-logs.index'))->assertStatus(403);
+
+        // 2. Kadiv Access Checks
+        $this->actingAs($kadiv);
+
+        // Allowed for Kadiv
+        $this->get(route('admin.dashboard'))->assertStatus(200);
+        $this->get(route('admin.articles.index'))->assertStatus(200);
+        $this->get(route('admin.categories.index'))->assertStatus(200);
+        $this->get(route('admin.tags.index'))->assertStatus(200);
+        $this->get(route('admin.comments.index'))->assertStatus(200);
+        $this->get(route('admin.analytics.index'))->assertStatus(200);
+        $this->get(route('admin.special-coverages.index'))->assertStatus(200);
+        $this->get(route('admin.editorial-members.index'))->assertStatus(200);
+
+        // Forbidden for Kadiv (Exclusively Super Admin)
+        $this->get(route('admin.users.index'))->assertStatus(403);
+        $this->get(route('admin.settings.index'))->assertStatus(403);
+        $this->get(route('admin.activity-logs.index'))->assertStatus(403);
+
+        // 3. Super Admin Access Checks (Full Access)
+        $this->actingAs($admin);
+        $this->get(route('admin.users.index'))->assertStatus(200);
+        $this->get(route('admin.settings.index'))->assertStatus(200);
+        $this->get(route('admin.activity-logs.index'))->assertStatus(200);
+    }
 }

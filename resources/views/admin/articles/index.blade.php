@@ -147,6 +147,7 @@
                             </td>
 
                             <!-- Action Buttons -->
+                            <!-- Action Buttons -->
                             <td class="px-5 py-4 text-right">
                                 <div class="flex items-center justify-end space-x-2">
                                     {{-- Quick workflow buttons --}}
@@ -158,7 +159,7 @@
                                                 <span>Kirim ke Kadiv</span>
                                             </button>
                                         </form>
-                                    @elseif(auth()->user()->hasRole(['pemimpin-redaksi', 'super-admin']) && in_array($article->status, ['submitted', 'under_review']))
+                                    @elseif(auth()->user()->isPemimpinRedaksi() && in_array($article->status, ['submitted', 'under_review']))
                                         <a href="{{ route('admin.articles.edit', $article) }}" class="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-bold rounded-md bg-blue-950 hover:bg-blue-900 text-white shadow-2xs transition" title="Tinjau & Putuskan Naskah">
                                             <i data-lucide="check-square" class="w-3 h-3 text-emerald-400"></i>
                                             <span>Tinjau & Putuskan</span>
@@ -171,17 +172,19 @@
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('admin.articles.edit', $article) }}" class="p-1.5 text-slate-600 hover:text-blue-900 rounded hover:bg-slate-100" title="Edit Naskah">
-                                        <i data-lucide="edit-3" class="w-4 h-4"></i>
-                                    </a>
+                                    @if(auth()->user()->isPemimpinRedaksi() || ($article->user_id === auth()->id() && $article->status !== 'published'))
+                                        <a href="{{ route('admin.articles.edit', $article) }}" class="p-1.5 text-slate-600 hover:text-blue-900 rounded hover:bg-slate-100" title="Edit Naskah">
+                                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                        </a>
 
-                                    <form action="{{ route('admin.articles.destroy', $article) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50" title="Hapus Artikel">
-                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                        </button>
-                                    </form>
+                                        <form action="{{ route('admin.articles.destroy', $article) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 rounded hover:bg-red-50" title="Hapus Artikel">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

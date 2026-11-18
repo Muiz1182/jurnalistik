@@ -111,7 +111,7 @@ class User extends Authenticatable
 
     public function canReviewArticles(): bool
     {
-        return $this->isEditor();
+        return $this->isPemimpinRedaksi();
     }
 
     public function canApproveArticles(): bool

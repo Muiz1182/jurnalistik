@@ -64,44 +64,82 @@
                     <a href="{{ route('admin.dashboard') }}" 
                        class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.dashboard') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 {{ request()->routeIs('admin.dashboard') ? 'text-blue-300' : 'text-slate-400' }}"></i>
-                        <span>Dashboard Utama</span>
+                        <span>
+                            @if(auth()->user()->isSuperAdmin())
+                                Dashboard Utama
+                            @elseif(auth()->user()->isPemimpinRedaksi())
+                                Meja Pimpinan Redaksi
+                            @else
+                                Dashboard Editor
+                            @endif
+                        </span>
                     </a>
 
                     <div class="pt-3 pb-1 px-3 text-slate-400 uppercase tracking-wider text-2xs font-bold">
                         Penerbitan Berita
                     </div>
 
+                    <a href="{{ route('admin.articles.create') }}" 
+                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.articles.create') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                        <i data-lucide="plus-circle" class="w-4 h-4 mr-3 {{ request()->routeIs('admin.articles.create') ? 'text-blue-300' : 'text-blue-400' }}"></i>
+                        <span>Tulis Berita Baru</span>
+                    </a>
+
                     <a href="{{ route('admin.articles.index') }}" 
-                       class="flex items-center justify-between px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.articles.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                       class="flex items-center justify-between px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.articles.index') || request()->routeIs('admin.articles.edit') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <div class="flex items-center">
-                            <i data-lucide="file-text" class="w-4 h-4 mr-3 {{ request()->routeIs('admin.articles.*') ? 'text-blue-300' : 'text-slate-400' }}"></i>
-                            <span>Manajemen Berita</span>
-                        </div>
-                        @php $pendingCount = \App\Models\Article::whereIn('status', ['submitted', 'under_review'])->count(); @endphp
-                        @if($pendingCount > 0)
-                            <span class="bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded text-2xs">
-                                {{ $pendingCount }}
+                            <i data-lucide="file-text" class="w-4 h-4 mr-3 {{ request()->routeIs('admin.articles.index') ? 'text-blue-300' : 'text-slate-400' }}"></i>
+                            <span>
+                                @if(auth()->user()->isPemimpinRedaksi())
+                                    Persetujuan Naskah
+                                @else
+                                    Naskah Saya
+                                @endif
                             </span>
+                        </div>
+                        @if(auth()->user()->isPemimpinRedaksi())
+                            @php $pendingKadiv = \App\Models\Article::whereIn('status', ['submitted', 'under_review'])->count(); @endphp
+                            @if($pendingKadiv > 0)
+                                <span class="bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded text-2xs" title="{{ $pendingKadiv }} naskah menunggu persetujuan Anda">
+                                    {{ $pendingKadiv }}
+                                </span>
+                            @endif
+                        @else
+                            @php $myRevisions = \App\Models\Article::where('user_id', auth()->id())->where('status', 'revision_required')->count(); @endphp
+                            @if($myRevisions > 0)
+                                <span class="bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded text-2xs" title="{{ $myRevisions }} naskah perlu revisi">
+                                    {{ $myRevisions }} revisi
+                                </span>
+                            @endif
                         @endif
                     </a>
 
                     <a href="{{ route('admin.assignments.index') }}" 
                        class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.assignments.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i data-lucide="calendar" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Penugasan Liputan</span>
+                        <span>
+                            @if(auth()->user()->isPemimpinRedaksi())
+                                Penugasan Liputan
+                            @else
+                                Agenda Tugas Saya
+                            @endif
+                        </span>
                     </a>
 
-                    <a href="{{ route('admin.categories.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.categories.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="folder" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Kategori Berita</span>
-                    </a>
+                    {{-- Wewenang Kadiv & Super Admin: Taksonomi Berita --}}
+                    @if(auth()->user()->isPemimpinRedaksi())
+                        <a href="{{ route('admin.categories.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.categories.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="folder" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Kategori Berita</span>
+                        </a>
 
-                    <a href="{{ route('admin.tags.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.tags.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="hash" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Tag Topik</span>
-                    </a>
+                        <a href="{{ route('admin.tags.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.tags.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="hash" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Tag Topik</span>
+                        </a>
+                    @endif
 
                     <div class="pt-3 pb-1 px-3 text-slate-400 uppercase tracking-wider text-2xs font-bold">
                         Multimedia & Dokumentasi
@@ -119,49 +157,59 @@
                         <span>Galeri Foto</span>
                     </a>
 
-                    <a href="{{ route('admin.videos.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.videos.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="video" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Video Liputan</span>
-                    </a>
-
-                    <a href="{{ route('admin.podcasts.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.podcasts.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="mic" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Podcast SPELAND</span>
-                    </a>
-
-                    <a href="{{ route('admin.special-coverages.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.special-coverages.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="layers" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Liputan Khusus</span>
-                    </a>
-
-                    <div class="pt-3 pb-1 px-3 text-slate-400 uppercase tracking-wider text-2xs font-bold">
-                        Interaksi & Pembaca
-                    </div>
-
-                    <a href="{{ route('admin.comments.index') }}" 
-                       class="flex items-center justify-between px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.comments.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <div class="flex items-center">
-                            <i data-lucide="message-square" class="w-4 h-4 mr-3 text-slate-400"></i>
-                            <span>Komentar & Moderasi</span>
-                        </div>
-                        @php $pendingComments = \App\Models\Comment::where('status', 'pending')->count(); @endphp
-                        @if($pendingComments > 0)
-                            <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-2xs">
-                                {{ $pendingComments }}
-                            </span>
-                        @endif
-                    </a>
-
-                    <a href="{{ route('admin.analytics.index') }}" 
-                       class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.analytics.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                        <i data-lucide="bar-chart-2" class="w-4 h-4 mr-3 text-slate-400"></i>
-                        <span>Analitik Berita</span>
-                    </a>
-
+                    {{-- Wewenang Kadiv & Super Admin: Video, Podcast, Liputan Khusus --}}
                     @if(auth()->user()->isPemimpinRedaksi())
+                        <a href="{{ route('admin.videos.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.videos.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="video" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Video Liputan</span>
+                        </a>
+
+                        <a href="{{ route('admin.podcasts.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.podcasts.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="mic" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Podcast SPELAND</span>
+                        </a>
+
+                        <a href="{{ route('admin.special-coverages.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.special-coverages.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="layers" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Liputan Khusus</span>
+                        </a>
+
+                        <div class="pt-3 pb-1 px-3 text-slate-400 uppercase tracking-wider text-2xs font-bold">
+                            Interaksi & Kinerja Redaksi
+                        </div>
+
+                        <a href="{{ route('admin.comments.index') }}" 
+                           class="flex items-center justify-between px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.comments.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <div class="flex items-center">
+                                <i data-lucide="message-square" class="w-4 h-4 mr-3 text-slate-400"></i>
+                                <span>Komentar & Moderasi</span>
+                            </div>
+                            @php $pendingComments = \App\Models\Comment::where('status', 'pending')->count(); @endphp
+                            @if($pendingComments > 0)
+                                <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-2xs">
+                                    {{ $pendingComments }}
+                                </span>
+                            @endif
+                        </a>
+
+                        <a href="{{ route('admin.analytics.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.analytics.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Analitik Berita</span>
+                        </a>
+
+                        <a href="{{ route('admin.editorial-members.index') }}" 
+                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.editorial-members.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                            <i data-lucide="award" class="w-4 h-4 mr-3 text-slate-400"></i>
+                            <span>Struktur Redaksi Sekolah</span>
+                        </a>
+                    @endif
+
+                    {{-- Eksklusif Super Admin: Tata Kelola Sistem, Pengguna, Pengaturan & Log --}}
+                    @if(auth()->user()->isSuperAdmin())
                         <div class="pt-3 pb-1 px-3 text-slate-400 uppercase tracking-wider text-2xs font-bold">
                             Tata Kelola Sistem
                         </div>
@@ -170,12 +218,6 @@
                            class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.users.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                             <i data-lucide="users" class="w-4 h-4 mr-3 text-slate-400"></i>
                             <span>Pengguna & Role</span>
-                        </a>
-
-                        <a href="{{ route('admin.editorial-members.index') }}" 
-                           class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.editorial-members.*') ? 'bg-blue-900 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <i data-lucide="award" class="w-4 h-4 mr-3 text-slate-400"></i>
-                            <span>Struktur Redaksi</span>
                         </a>
 
                         <a href="{{ route('admin.activity-logs.index') }}" 

@@ -171,8 +171,13 @@ class ArticleController extends Controller
         $user = auth()->user();
 
         // Authority check
-        if ($user->hasRole('reporter') && $article->user_id !== $user->id) {
-            abort(403, 'Anda tidak memiliki hak untuk menyunting artikel ini.');
+        if (!$user->isPemimpinRedaksi()) {
+            if ($article->user_id !== $user->id) {
+                abort(403, 'Anda tidak memiliki hak untuk menyunting naskah milik pengguna lain.');
+            }
+            if ($article->status === 'published') {
+                abort(403, 'Artikel yang sudah diterbitkan hanya dapat disunting oleh Kadiv atau Super Admin.');
+            }
         }
 
         $categories = Category::where('is_active', true)->orderBy('order')->get();
@@ -186,8 +191,13 @@ class ArticleController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->hasRole('reporter') && $article->user_id !== $user->id) {
-            abort(403, 'Anda tidak memiliki hak untuk menyunting artikel ini.');
+        if (!$user->isPemimpinRedaksi()) {
+            if ($article->user_id !== $user->id) {
+                abort(403, 'Anda tidak memiliki hak untuk menyunting naskah milik pengguna lain.');
+            }
+            if ($article->status === 'published') {
+                abort(403, 'Artikel yang sudah diterbitkan hanya dapat disunting oleh Kadiv atau Super Admin.');
+            }
         }
 
         $validated = $request->validate([
@@ -284,8 +294,13 @@ class ArticleController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->hasRole('reporter') && $article->user_id !== $user->id) {
-            abort(403);
+        if (!$user->isPemimpinRedaksi()) {
+            if ($article->user_id !== $user->id) {
+                abort(403, 'Anda hanya dapat menghapus naskah milik Anda sendiri.');
+            }
+            if ($article->status === 'published') {
+                abort(403, 'Artikel yang sudah diterbitkan hanya dapat dihapus atau diarsipkan oleh Kadiv atau Super Admin.');
+            }
         }
 
         $title = $article->title;

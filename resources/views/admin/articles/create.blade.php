@@ -228,20 +228,22 @@
                     Pengaturan Tambahan
                 </h3>
 
-                <label class="flex items-center space-x-2.5 cursor-pointer">
-                    <input type="checkbox" name="is_breaking" value="1" class="rounded border-slate-300 text-red-600 focus:ring-red-600">
-                    <span class="font-bold text-red-700">Tampilkan sebagai Breaking News</span>
-                </label>
+                @if(auth()->user()->isPemimpinRedaksi())
+                    <label class="flex items-center space-x-2.5 cursor-pointer">
+                        <input type="checkbox" name="is_breaking" value="1" class="rounded border-slate-300 text-red-600 focus:ring-red-600">
+                        <span class="font-bold text-red-700">Tampilkan sebagai Breaking News</span>
+                    </label>
 
-                <label class="flex items-center space-x-2.5 cursor-pointer">
-                    <input type="checkbox" name="is_headline" value="1" class="rounded border-slate-300 text-blue-900 focus:ring-blue-900">
-                    <span class="font-semibold text-slate-800">Jadikan Headline Utama Beranda</span>
-                </label>
+                    <label class="flex items-center space-x-2.5 cursor-pointer">
+                        <input type="checkbox" name="is_headline" value="1" class="rounded border-slate-300 text-blue-900 focus:ring-blue-900">
+                        <span class="font-semibold text-slate-800">Jadikan Headline Utama Beranda</span>
+                    </label>
 
-                <label class="flex items-center space-x-2.5 cursor-pointer">
-                    <input type="checkbox" name="is_featured" value="1" class="rounded border-slate-300 text-blue-900 focus:ring-blue-900">
-                    <span class="font-semibold text-slate-800">Sorotan Khusus (Featured)</span>
-                </label>
+                    <label class="flex items-center space-x-2.5 cursor-pointer">
+                        <input type="checkbox" name="is_featured" value="1" class="rounded border-slate-300 text-blue-900 focus:ring-blue-900">
+                        <span class="font-semibold text-slate-800">Sorotan Khusus (Featured)</span>
+                    </label>
+                @endif
 
                 <label class="flex items-center space-x-2.5 cursor-pointer">
                     <input type="checkbox" name="allow_comments" value="1" checked class="rounded border-slate-300 text-blue-900 focus:ring-blue-900">

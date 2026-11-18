@@ -77,35 +77,47 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'role'])->group(function () {
-    // Dashboard Overview
+// Group 1: General Editorial Desk (Editor, Kadiv, Super Admin)
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin,pemimpin-redaksi,editor'])->group(function () {
+    // Dashboard Overview (adapts dynamically per role)
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // News Management (Articles)
     Route::resource('articles', AdminArticleController::class);
-    // Editorial Workflow Routes
+    // Editor submitting to Kadiv
     Route::post('articles/{article}/submit', [AdminArticleController::class, 'submitToEditor'])->name('articles.submit');
+
+    // Assignments View & Status Update
+    Route::get('assignments', [AssignmentController::class, 'index'])->name('assignments.index');
+    Route::patch('assignments/{assignment}/status', [AssignmentController::class, 'updateStatus'])->name('assignments.updateStatus');
+
+    // Media & Photos for News Articles
+    Route::resource('media', MediaController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('galleries', GalleryController::class)->except(['show']);
+    Route::delete('gallery-photos/{photo}', [GalleryController::class, 'destroyPhoto'])->name('gallery-photos.destroy');
+});
+
+// Group 2: Kadiv & Super Admin Exclusive (Wewenang Pimpinan Redaksi)
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin,pemimpin-redaksi'])->group(function () {
+    // Editorial Decisions & Publication Workflow
     Route::post('articles/{article}/review', [AdminArticleController::class, 'review'])->name('articles.review');
     Route::post('articles/{article}/revision', [AdminArticleController::class, 'revisionRequired'])->name('articles.revision');
     Route::post('articles/{article}/approve', [AdminArticleController::class, 'approve'])->name('articles.approve');
     Route::post('articles/{article}/publish', [AdminArticleController::class, 'publish'])->name('articles.publish');
     Route::post('articles/{article}/archive', [AdminArticleController::class, 'archive'])->name('articles.archive');
 
-    // Categories & Tags
+    // Assigning Tasks to Editors
+    Route::post('assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+    Route::delete('assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+
+    // News Taxonomy (Categories & Tags)
     Route::resource('categories', CategoryController::class)->except(['create', 'show', 'edit']);
     Route::resource('tags', TagController::class)->except(['create', 'show', 'edit']);
 
-    // Multimedia & Library
-    Route::resource('media', MediaController::class)->only(['index', 'store', 'destroy']);
-    Route::resource('galleries', GalleryController::class)->except(['show']);
-    Route::delete('gallery-photos/{photo}', [GalleryController::class, 'destroyPhoto'])->name('gallery-photos.destroy');
+    // Editorial Projects & Channels
+    Route::resource('special-coverages', SpecialCoverageController::class)->except(['show']);
     Route::resource('videos', VideoController::class)->except(['show']);
     Route::resource('podcasts', PodcastController::class)->except(['show']);
-    Route::resource('special-coverages', SpecialCoverageController::class)->except(['show']);
-
-    // User & Editorial Management
-    Route::resource('users', UserController::class)->except(['show']);
-    Route::resource('editorial-members', EditorialMemberController::class)->except(['create', 'show', 'edit']);
 
     // Comment Moderation
     Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
@@ -114,15 +126,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role'])->group(func
     Route::post('comments/{comment}/spam', [AdminCommentController::class, 'markSpam'])->name('comments.spam');
     Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
 
-    // Assignments
-    Route::resource('assignments', AssignmentController::class)->only(['index', 'store', 'destroy']);
-    Route::patch('assignments/{assignment}/status', [AssignmentController::class, 'updateStatus'])->name('assignments.updateStatus');
+    // Editorial Board Members (Struktur Redaksi Sekolah)
+    Route::resource('editorial-members', EditorialMemberController::class)->except(['create', 'show', 'edit']);
 
-    // Analytics & Logs
+    // Newsroom Analytics
     Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
-    Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+});
 
-    // Settings
+// Group 3: Super Admin Exclusive (Tata Kelola Akun & Konfigurasi Sistem)
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:super-admin'])->group(function () {
+    // User Accounts Management
+    Route::resource('users', UserController::class)->except(['show']);
+
+    // System Settings & Configuration
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // System Activity Logs
+    Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 });

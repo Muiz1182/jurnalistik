@@ -8,10 +8,22 @@
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-sm font-bold text-slate-800">Daftar Agenda & Penugasan Liputan</h2>
-            <p class="text-xs text-slate-500">Instruksi liputan lapangan dari Pemimpin Redaksi / Editor untuk reporter dan fotografer.</p>
+            <h2 class="text-sm font-bold text-slate-800">
+                @if(auth()->user()->isPemimpinRedaksi())
+                    Daftar Agenda & Penugasan Liputan Redaksi
+                @else
+                    Agenda Tugas Liputan Saya
+                @endif
+            </h2>
+            <p class="text-xs text-slate-500">
+                @if(auth()->user()->isPemimpinRedaksi())
+                    Instruksi dan koordinasi agenda liputan dari Kadiv untuk tim jurnalistik sekolah.
+                @else
+                    Daftar agenda penugasan liputan yang diberikan oleh Kadiv kepada Anda.
+                @endif
+            </p>
         </div>
-        @if(auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('pemimpin-redaksi') || auth()->user()->hasRole('editor'))
+        @if(auth()->user()->isPemimpinRedaksi())
             <button @click="addModal = true" class="bg-blue-950 hover:bg-blue-900 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-2xs flex items-center shrink-0">
                 <i data-lucide="send" class="w-4 h-4 mr-1.5"></i>
                 <span>Tugaskan Liputan Baru</span>
@@ -92,7 +104,7 @@
                                     <i data-lucide="edit-2" class="w-3.5 h-3.5 mr-1"></i>
                                     <span>Update Status</span>
                                 </button>
-                                @if(auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('pemimpin-redaksi'))
+                                @if(auth()->user()->isPemimpinRedaksi())
                                     <form action="{{ route('admin.assignments.destroy', $a) }}" method="POST" onsubmit="return confirm('Hapus penugasan liputan ini?')" class="inline">
                                         @csrf
                                         @method('DELETE')

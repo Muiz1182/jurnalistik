@@ -17,18 +17,23 @@ class AssignmentController extends Controller
         $user = auth()->user();
         $query = EditorialAssignment::with(['reporter', 'assignedBy', 'article']);
 
-        if ($user->hasRole('reporter')) {
+        if (!$user->isPemimpinRedaksi()) {
             $query->where('reporter_id', $user->id);
         }
 
         $assignments = $query->latest()->paginate(15);
-        $reporters = User::whereHas('role', fn($q) => $q->whereIn('slug', ['reporter', 'fotografer']))->get();
+        $reporters = User::whereHas('role', fn($q) => $q->whereIn('slug', ['editor', 'reporter', 'fotografer']))->get();
 
         return view('admin.assignments.index', compact('assignments', 'reporters'));
     }
 
     public function store(Request $request): RedirectResponse
     {
+        $user = auth()->user();
+        if (!$user->isPemimpinRedaksi()) {
+            abort(403, 'Hanya Kadiv atau Super Admin yang dapat memberikan instruksi liputan.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'brief' => 'required|string',
@@ -66,6 +71,11 @@ class AssignmentController extends Controller
 
     public function destroy(EditorialAssignment $assignment): RedirectResponse
     {
+        $user = auth()->user();
+        if (!$user->isPemimpinRedaksi()) {
+            abort(403, 'Hanya Kadiv atau Super Admin yang dapat menghapus penugasan liputan.');
+        }
+
         $title = $assignment->title;
         $assignment->delete();
 
