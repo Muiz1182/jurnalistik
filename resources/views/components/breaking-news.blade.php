@@ -6,33 +6,41 @@
 @endphp
 
 @if($breakingItem || ($customBreakingActive && $customText))
-    <div class="bg-red-700 text-white text-xs border-b border-red-800 shadow-inner">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center py-2">
-            <!-- Label Badge -->
-            <div class="flex items-center space-x-1.5 shrink-0 bg-red-900 text-white font-extrabold uppercase px-2.5 py-1 rounded tracking-wider shadow-sm mr-3">
-                <span class="inline-block w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                <span>BREAKING NEWS</span>
-            </div>
+    <div class="bg-gradient-to-r from-red-50 via-white to-red-50/50 border-b border-red-200/70 py-2.5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-3">
+                
+                <!-- Label & Ticker Content -->
+                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                    <!-- Badge -->
+                    <div class="flex items-center space-x-1.5 shrink-0 bg-red-600 text-white font-black uppercase text-3xs sm:text-2xs px-2.5 py-1 rounded-md tracking-wider shadow-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                        <span>BREAKING NEWS</span>
+                    </div>
 
-            <!-- Ticker Content -->
-            <div class="overflow-hidden flex-grow whitespace-nowrap">
-                @if($breakingItem)
-                    <a href="{{ route('articles.show', $breakingItem->slug) }}" class="hover:underline font-semibold text-white tracking-wide">
-                        {{ $breakingItem->title }}
-                    </a>
-                @elseif($customBreakingActive && $customText)
-                    <a href="{{ $customUrl }}" class="hover:underline font-semibold text-white tracking-wide">
-                        {{ $customText }}
-                    </a>
-                @endif
-            </div>
+                    <!-- Headline text -->
+                    <div class="truncate text-xs font-bold text-slate-900">
+                        @if($breakingItem)
+                            <a href="{{ route('articles.show', $breakingItem->slug) }}" class="hover:text-red-600 transition inline-flex items-center">
+                                <span>{{ $breakingItem->title }}</span>
+                            </a>
+                        @elseif($customBreakingActive && $customText)
+                            <a href="{{ $customUrl }}" class="hover:text-red-600 transition inline-flex items-center">
+                                <span>{{ $customText }}</span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
 
-            <!-- Detail CTA -->
-            <div class="hidden sm:block shrink-0 ml-4">
-                <a href="{{ $breakingItem ? route('articles.show', $breakingItem->slug) : $customUrl }}" class="text-red-200 hover:text-white font-bold inline-flex items-center">
-                    <span>Baca</span>
-                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
-                </a>
+                <!-- Right Action Link -->
+                <div class="shrink-0 pl-2">
+                    <a href="{{ $breakingItem ? route('articles.show', $breakingItem->slug) : $customUrl }}" 
+                       class="text-xs font-bold text-red-600 hover:text-red-700 transition inline-flex items-center space-x-1 group">
+                        <span class="hidden sm:inline">Baca Liputan</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
