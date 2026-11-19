@@ -30,7 +30,7 @@
                 </div>
                 <!-- Action Hover Overlay -->
                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center space-x-2">
-                    <button type="button" @click="navigator.clipboard.writeText('{{ $item->url }}'); alert('Tautan gambar berhasil disalin!')" class="p-2 bg-white text-slate-800 rounded-lg hover:bg-slate-100 shadow" title="Salin Tautan">
+                    <button type="button" @click="navigator.clipboard.writeText('{{ $item->url }}'); showToast('Tautan gambar berhasil disalin ke papan klip!', 'success')" class="p-2 bg-white text-slate-800 rounded-lg hover:bg-slate-100 shadow" title="Salin Tautan">
                         <i data-lucide="copy" class="w-4 h-4"></i>
                     </button>
                     <form action="{{ route('admin.media.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus media ini?')">

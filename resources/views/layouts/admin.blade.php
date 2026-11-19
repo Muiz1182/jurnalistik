@@ -306,25 +306,6 @@
                 </div>
             </header>
 
-            <!-- Alerts -->
-            @if(session('success'))
-                <div class="mx-6 mt-4 p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-lg flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-emerald-600"></i>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="mx-6 mt-4 p-3.5 bg-red-50 border border-red-200 text-red-800 text-xs rounded-lg flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i data-lucide="alert-circle" class="w-4 h-4 mr-2 text-red-600"></i>
-                        <span>{{ session('error') }}</span>
-                    </div>
-                </div>
-            @endif
-
             <!-- Body Content Area -->
             <main class="flex-grow p-4 sm:p-6 overflow-y-auto">
                 @yield('content')
@@ -332,6 +313,9 @@
         </div>
 
     </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <x-toast />
 
     <!-- Scripts -->
     <script>

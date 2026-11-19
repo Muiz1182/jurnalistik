@@ -94,4 +94,24 @@ class PortalAndEditorialTest extends TestCase
         $removeResponse->assertSessionHas('success');
         $this->assertNull(Setting::get('site_logo'));
     }
+
+    public function test_toast_notifications_render_in_admin_and_public(): void
+    {
+        $admin = User::where('username', 'admin')->first();
+        $this->assertNotNull($admin);
+
+        // Public page with session flash
+        $publicResponse = $this->withSession(['success' => 'Operasi publik berhasil dilakukan!'])->get('/');
+        $publicResponse->assertStatus(200);
+        $publicResponse->assertSee('spelandToastManager');
+        $publicResponse->assertSee('Operasi publik berhasil dilakukan!');
+
+        // Admin page with session flash
+        $adminResponse = $this->actingAs($admin)
+            ->withSession(['success' => 'Perubahan sistem berhasil disimpan!'])
+            ->get(route('admin.dashboard'));
+        $adminResponse->assertStatus(200);
+        $adminResponse->assertSee('spelandToastManager');
+        $adminResponse->assertSee('Perubahan sistem berhasil disimpan!');
+    }
 }

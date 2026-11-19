@@ -89,25 +89,7 @@
     @include('components.breaking-news')
 
     <!-- TOAST NOTIFICATIONS -->
-    @if(session('success'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" class="fixed bottom-6 right-6 z-50 flex items-center bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-xs font-semibold border border-slate-700 animate-slide-up">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-3 animate-ping"></span>
-            <span>{{ session('success') }}</span>
-            <button @click="show = false" class="ml-4 text-slate-400 hover:text-white focus:outline-none">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" class="fixed bottom-6 right-6 z-50 flex items-center bg-red-950 text-white px-5 py-3.5 rounded-xl shadow-2xl text-xs font-semibold border border-red-800 animate-slide-up">
-            <span class="w-2 h-2 rounded-full bg-red-400 mr-3 animate-ping"></span>
-            <span>{{ session('error') }}</span>
-            <button @click="show = false" class="ml-4 text-red-300 hover:text-white focus:outline-none">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-    @endif
+    <x-toast />
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow">
