@@ -1,6 +1,5 @@
 <div
     x-data="spelandToastManager()"
-    x-init="init()"
     @toast.window="add($event.detail)"
     class="fixed top-5 right-5 z-[9999] pointer-events-none flex flex-col gap-2.5 max-w-sm sm:max-w-md w-full px-4 sm:px-0"
     aria-live="polite"
@@ -95,8 +94,12 @@
         return {
             toasts: [],
             timerInterval: null,
+            initialized: false,
 
             init() {
+                if (this.initialized) return;
+                this.initialized = true;
+
                 // Initialize global trigger helper
                 window.showToast = (message, type = 'success', title = null, duration = null) => {
                     this.add({ message, type, title, duration });
@@ -179,7 +182,16 @@
                     detail = { message: detail, type: 'success' };
                 }
 
+                const message = (detail.message || '').toString().trim();
                 const type = detail.type || 'info';
+
+                // Prevent duplicate toast if an identical active toast already exists
+                const existing = this.toasts.find(t => t.visible && t.message === message && t.type === type);
+                if (existing) {
+                    existing.remaining = existing.duration;
+                    return;
+                }
+
                 const duration = detail.duration || (type === 'error' ? 6000 : 4500);
                 const defaultTitle = {
                     success: 'Berhasil',
@@ -192,7 +204,7 @@
                     id: Date.now() + Math.random(),
                     type: type,
                     title: detail.title ?? defaultTitle,
-                    message: detail.message || '',
+                    message: message,
                     duration: duration,
                     remaining: duration,
                     paused: false,
