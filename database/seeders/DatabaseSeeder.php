@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder
             'editorial_email' => 'redaksi.speland@gmail.com',
             'social_instagram' => 'https://instagram.com/smpn9probolinggo_official',
             'social_youtube' => 'https://youtube.com/@smpnegeri9probolinggo',
-            'social_facebook' => 'https://facebook.com/smpnegeri9probolinggo',
+            'social_tiktok' => 'https://www.tiktok.com/@smpnegeri9probolinggo',
             'chief_editor' => '-',
             'advisor_name' => '-',
             'about_brief' => 'Jurnalistik SPELAND merupakan media informasi, komunikasi, dan publikasi digital resmi SMP Negeri 9 Probolinggo yang dikelola langsung oleh tim jurnalis pelajar sekolah.',

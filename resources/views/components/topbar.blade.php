@@ -22,14 +22,25 @@
         <div class="flex items-center space-x-4 text-2xs sm:text-xs">
             <div class="hidden sm:flex items-center space-x-3 text-slate-400 border-r border-slate-800 pr-4">
                 <span class="text-3xs uppercase tracking-wider text-slate-500 font-bold">Kanal Resmi:</span>
+                <!-- TikTok -->
+                <a href="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook', '#')) }}" target="_blank" rel="noopener" class="hover:text-cyan-300 transition" title="TikTok Resmi SPELAND">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.49 6.27 6.27 0 0 0 1.9-4.49V8.75a8.16 8.16 0 0 0 4.87 1.58V6.89c-.338-.002-.676-.07-1-.2z"/>
+                    </svg>
+                </a>
+                <!-- Instagram -->
                 <a href="{{ \App\Models\Setting::get('social_instagram', '#') }}" target="_blank" rel="noopener" class="hover:text-pink-400 transition" title="Instagram Resmi">
-                    <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                    </svg>
                 </a>
+                <!-- YouTube -->
                 <a href="{{ \App\Models\Setting::get('social_youtube', '#') }}" target="_blank" rel="noopener" class="hover:text-red-400 transition" title="YouTube SMPN 9">
-                    <i data-lucide="youtube" class="w-3.5 h-3.5"></i>
-                </a>
-                <a href="{{ \App\Models\Setting::get('social_facebook', '#') }}" target="_blank" rel="noopener" class="hover:text-blue-400 transition" title="Facebook">
-                    <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
                 </a>
             </div>
 

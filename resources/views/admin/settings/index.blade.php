@@ -212,11 +212,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kanal YouTube Resmi</label>
-                    <input type="url" name="social_youtube" value="{{ \App\Models\Setting::get('social_youtube') }}" class="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                    <input type="url" name="social_youtube" value="{{ \App\Models\Setting::get('social_youtube') }}" class="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="https://youtube.com/@smpnegeri9probolinggo">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Halaman Facebook</label>
-                    <input type="url" name="social_facebook" value="{{ \App\Models\Setting::get('social_facebook') }}" class="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Akun TikTok Resmi</label>
+                    <input type="url" name="social_tiktok" value="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook')) }}" class="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="https://www.tiktok.com/@smpnegeri9probolinggo">
                 </div>
             </div>
         </div>

@@ -114,4 +114,25 @@ class PortalAndEditorialTest extends TestCase
         $adminResponse->assertSee('spelandToastManager');
         $adminResponse->assertSee('Perubahan sistem berhasil disimpan!');
     }
+
+    public function test_tiktok_social_media_setting_and_display(): void
+    {
+        $admin = User::where('username', 'admin')->first();
+        $this->assertNotNull($admin);
+
+        // Update TikTok setting
+        $updateResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'social_tiktok' => 'https://www.tiktok.com/@smpn9probolinggo_official',
+            'social_instagram' => 'https://instagram.com/smpn9probolinggo_official',
+            'social_youtube' => 'https://youtube.com/@smpnegeri9probolinggo',
+        ]);
+        $updateResponse->assertSessionHas('success');
+        $this->assertEquals('https://www.tiktok.com/@smpn9probolinggo_official', Setting::get('social_tiktok'));
+
+        // Check public sees TikTok
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertSee('https://www.tiktok.com/@smpn9probolinggo_official');
+        $homeResponse->assertSee('TikTok');
+    }
 }
