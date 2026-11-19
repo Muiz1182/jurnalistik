@@ -5,13 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            // Delete physical avatar from storage if exists
+            if ($user->avatar && !Str::startsWith($user->avatar, ['http://', 'https://']) && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            // Detach Spatie roles & permissions before deletion
+            if (method_exists($user, 'roles')) {
+                $user->roles()->detach();
+            }
+            if (method_exists($user, 'permissions')) {
+                $user->permissions()->detach();
+            }
+        });
+    }
 
     protected $fillable = [
         'name',

@@ -22,7 +22,7 @@ class EditorKadivWorkflowTest extends TestCase
         $this->assertNotNull($kadiv, 'Kadiv account must exist');
 
         // Cleanup any previous run
-        Article::withTrashed()->where('title', 'like', '%Liputan Kegiatan P5 Speland 2026%')->forceDelete();
+        Article::where('title', 'like', '%Liputan Kegiatan P5 Speland 2026%')->delete();
 
         // 2. Editor logs in and creates a draft article
         $this->actingAs($editor);

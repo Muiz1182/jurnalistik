@@ -135,4 +135,41 @@ class PortalAndEditorialTest extends TestCase
         $homeResponse->assertSee('https://www.tiktok.com/@smpn9probolinggo_official');
         $homeResponse->assertSee('TikTok');
     }
+
+    public function test_article_and_file_are_permanently_deleted_from_database_and_storage(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::where('username', 'admin')->first();
+        $this->assertNotNull($admin);
+
+        // Upload fake image file
+        $fakeFile = \Illuminate\Http\UploadedFile::fake()->image('liputan-berita.jpg', 640, 480);
+        $storedPath = $fakeFile->store('articles', 'public');
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($storedPath);
+
+        $category = Category::first();
+        $article = Article::create([
+            'title' => 'Berita Uji Coba Hapus Permanen',
+            'slug' => 'berita-uji-coba-hapus-permanen',
+            'content' => 'Konten artikel uji coba hapus permanen.',
+            'category_id' => $category->id,
+            'user_id' => $admin->id,
+            'featured_image' => $storedPath,
+            'status' => 'draft',
+        ]);
+
+        $this->assertDatabaseHas('articles', ['id' => $article->id]);
+
+        // Delete article via admin controller
+        $deleteResponse = $this->actingAs($admin)->delete(route('admin.articles.destroy', $article));
+        $deleteResponse->assertRedirect(route('admin.articles.index'));
+        $deleteResponse->assertSessionHas('success');
+
+        // Verify permanently deleted from database (row does not exist at all)
+        $this->assertDatabaseMissing('articles', ['id' => $article->id]);
+
+        // Verify physical file was deleted from storage disk
+        \Illuminate\Support\Facades\Storage::disk('public')->assertMissing($storedPath);
+    }
 }

@@ -35,6 +35,12 @@ class SpecialCoverage extends Model
                 $coverage->slug = Str::slug($coverage->title);
             }
         });
+        static::deleting(function ($coverage) {
+            if ($coverage->banner_image && !Str::startsWith($coverage->banner_image, ['http://', 'https://']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($coverage->banner_image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($coverage->banner_image);
+            }
+            $coverage->articles()->detach();
+        });
     }
 
     public function articles(): BelongsToMany

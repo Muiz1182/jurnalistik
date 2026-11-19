@@ -8,13 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Article extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Article $article) {
+            // Delete physical featured image from public storage
+            if ($article->featured_image && !Str::startsWith($article->featured_image, ['http://', 'https://']) && Storage::disk('public')->exists($article->featured_image)) {
+                Storage::disk('public')->delete($article->featured_image);
+            }
+
+            // Cleanup relationships and child records before permanent deletion
+            $article->tags()->detach();
+            $article->specialCoverages()->detach();
+            $article->bookmarks()->delete();
+            $article->comments()->delete();
+            $article->revisions()->delete();
+            $article->views()->delete();
+            EditorialAssignment::where('article_id', $article->id)->update(['article_id' => null]);
+        });
+    }
 
     protected $fillable = [
         'title',
@@ -66,7 +85,7 @@ class Article extends Model
                 $baseSlug = Str::slug($article->title);
                 $slug = $baseSlug;
                 $counter = 1;
-                while (static::withTrashed()->where('slug', $slug)->exists()) {
+                while (static::where('slug', $slug)->exists()) {
                     $slug = "{$baseSlug}-{$counter}";
                     $counter++;
                 }

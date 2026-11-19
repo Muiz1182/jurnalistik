@@ -39,6 +39,14 @@ class Gallery extends Model
                 $gallery->slug = Str::slug($gallery->title);
             }
         });
+        static::deleting(function ($gallery) {
+            if ($gallery->cover_image && !Str::startsWith($gallery->cover_image, ['http://', 'https://']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($gallery->cover_image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($gallery->cover_image);
+            }
+            foreach ($gallery->photos as $photo) {
+                $photo->delete();
+            }
+        });
     }
 
     public function user(): BelongsTo

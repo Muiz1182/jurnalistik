@@ -5,11 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class GalleryPhoto extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (GalleryPhoto $photo) {
+            if ($photo->image_path && !Str::startsWith($photo->image_path, ['http://', 'https://']) && Storage::disk('public')->exists($photo->image_path)) {
+                Storage::disk('public')->delete($photo->image_path);
+            }
+        });
+    }
 
     protected $fillable = [
         'gallery_id',

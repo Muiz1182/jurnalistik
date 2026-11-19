@@ -29,6 +29,15 @@ class EditorialMember extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::deleting(function (EditorialMember $member) {
+            if ($member->photo && !Str::startsWith($member->photo, ['http://', 'https://']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($member->photo)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($member->photo);
+            }
+        });
+    }
+
     public function getPhotoUrlAttribute(): string
     {
         if ($this->photo && file_exists(public_path('storage/' . $this->photo))) {
