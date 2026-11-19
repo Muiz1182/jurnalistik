@@ -7,6 +7,11 @@
 
     <title>@yield('title', 'Meja Redaksi - JURNALISTIK SPELAND')</title>
 
+    <!-- Favicon -->
+    @if(\App\Models\Setting::get('site_logo'))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}">
+    @endif
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,9 +71,15 @@
             <!-- 1. Fixed Brand Masthead -->
             <div class="p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-blue-600 text-white rounded-lg flex items-center justify-center font-black text-sm shadow-xs">
-                        JS
-                    </div>
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <div class="w-9 h-9 rounded-lg overflow-hidden bg-white p-0.5 border border-slate-700 shadow-xs shrink-0">
+                            <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                    @else
+                        <div class="w-9 h-9 bg-blue-600 text-white rounded-lg flex items-center justify-center font-black text-sm shadow-xs shrink-0">
+                            JS
+                        </div>
+                    @endif
                     <div>
                         <span class="font-extrabold text-sm text-white tracking-tight block">REDAKSI SPELAND</span>
                         <span class="text-3xs text-slate-400 block uppercase tracking-wider font-semibold">Sistem Redaksi Digital</span>

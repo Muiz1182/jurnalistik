@@ -6,9 +6,15 @@
             <!-- Brand & Identity (2 Columns) -->
             <div class="lg:col-span-2 space-y-4">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-900 text-white flex items-center justify-center font-serif font-black text-lg border-b-2 border-red-500 shadow-md">
-                        JS
-                    </div>
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <div class="w-10 h-10 rounded-xl overflow-hidden bg-white p-0.5 border border-slate-700 shadow-md shrink-0">
+                            <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                    @else
+                        <div class="w-10 h-10 rounded-xl bg-blue-900 text-white flex items-center justify-center font-serif font-black text-lg border-b-2 border-red-500 shadow-md shrink-0">
+                            JS
+                        </div>
+                    @endif
                     <div>
                         <span class="text-lg font-black text-white tracking-tight block leading-none">
                             JURNALISTIK <span class="text-blue-400">SPELAND</span>

@@ -25,6 +25,11 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
+    <!-- Favicon -->
+    @if(\App\Models\Setting::get('site_logo'))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}">
+    @endif
+
     <!-- Google Fonts: Plus Jakarta Sans & Merriweather -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

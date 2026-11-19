@@ -58,4 +58,40 @@ class PortalAndEditorialTest extends TestCase
             $response->assertStatus(200);
         }
     }
+
+    public function test_admin_can_upload_and_remove_site_logo(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::where('username', 'admin')->first();
+        $this->assertNotNull($admin);
+
+        $fakeLogo = \Illuminate\Http\UploadedFile::fake()->image('custom-speland-logo.png', 200, 200);
+
+        $updateResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'site_name' => 'JURNALISTIK SPELAND',
+            'site_tagline' => 'Mengabarkan Fakta, Menyuarakan Cerita.',
+            'site_logo' => $fakeLogo,
+        ]);
+
+        $updateResponse->assertSessionHas('success');
+        $storedLogo = Setting::get('site_logo');
+        $this->assertNotNull($storedLogo);
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($storedLogo);
+
+        // Verify public view sees the logo
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertSee(asset('storage/' . $storedLogo));
+
+        // Test removing the logo
+        $removeResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'site_name' => 'JURNALISTIK SPELAND',
+            'site_tagline' => 'Mengabarkan Fakta, Menyuarakan Cerita.',
+            'remove_logo' => '1',
+        ]);
+
+        $removeResponse->assertSessionHas('success');
+        $this->assertNull(Setting::get('site_logo'));
+    }
 }

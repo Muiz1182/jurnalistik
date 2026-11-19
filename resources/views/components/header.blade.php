@@ -12,11 +12,17 @@
                 </button>
 
                 <a href="{{ route('home') }}" class="flex items-center space-x-3.5 group">
-                    <!-- Bespoke Emblem -->
-                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-950 text-white flex flex-col items-center justify-center border-b-2 border-red-600 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                        <span class="font-serif font-black text-lg sm:text-xl leading-none">JS</span>
-                        <span class="text-3xs font-extrabold uppercase tracking-widest text-red-400 scale-75 -mt-0.5">PRESS</span>
-                    </div>
+                    <!-- Bespoke Emblem / Custom Uploaded Logo -->
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-slate-200 shadow-sm shrink-0 group-hover:scale-105 transition-transform bg-white p-0.5">
+                            <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo {{ \App\Models\Setting::get('site_name', 'Jurnalistik SPELAND') }}" class="w-full h-full object-contain">
+                        </div>
+                    @else
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-950 text-white flex flex-col items-center justify-center border-b-2 border-red-600 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                            <span class="font-serif font-black text-lg sm:text-xl leading-none">JS</span>
+                            <span class="text-3xs font-extrabold uppercase tracking-widest text-red-400 scale-75 -mt-0.5">PRESS</span>
+                        </div>
+                    @endif
 
                     <!-- Title & Tagline -->
                     <div>

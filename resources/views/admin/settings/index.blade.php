@@ -29,13 +29,88 @@
         </button>
     </div>
 
-    <form action="{{ route('admin.settings.update') }}" method="POST" class="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs space-y-6">
+    <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs space-y-6">
         @csrf
         @method('PUT')
 
         <!-- Tab 1: Identitas Media & Sekolah -->
-        <div x-show="tab === 'general'" class="space-y-4">
+        <div x-show="tab === 'general'" class="space-y-5" x-data="{ logoPreview: null, removeLogo: false }">
             <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider pb-2 border-b border-slate-100">Informasi Media & Satuan Pendidikan</h3>
+            
+            <!-- Logo Website / Lambang Portal Media -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                            Logo Website / Lambang Media
+                        </label>
+                        <p class="text-3xs text-slate-500 mt-0.5">
+                            Logo resmi yang tampil pada header publik, sidebar redaksi, favicon, dan footer portal.
+                        </p>
+                    </div>
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <span class="text-3xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                            Logo Kustom Aktif
+                        </span>
+                    @else
+                        <span class="text-3xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+                            Emblem Standar JS
+                        </span>
+                    @endif
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-5 pt-2">
+                    <!-- Current / Live Preview Container -->
+                    <div class="shrink-0 flex flex-col items-center">
+                        <template x-if="logoPreview">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-blue-900 shadow-sm bg-white p-1">
+                                <img :src="logoPreview" alt="Pratinjau Logo" class="w-full h-full object-contain">
+                            </div>
+                        </template>
+                        <template x-if="!logoPreview">
+                            <div>
+                                @if(\App\Models\Setting::get('site_logo'))
+                                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-white p-1">
+                                        <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo Saat Ini" class="w-full h-full object-contain">
+                                    </div>
+                                @else
+                                    <div class="w-16 h-16 rounded-xl bg-slate-950 text-white flex flex-col items-center justify-center border-b-2 border-red-600 shadow-sm">
+                                        <span class="font-serif font-black text-2xl leading-none">JS</span>
+                                        <span class="text-3xs font-extrabold uppercase tracking-widest text-red-400 scale-75 -mt-0.5">PRESS</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </template>
+                        <span class="text-3xs text-slate-400 font-semibold mt-1.5" x-text="logoPreview ? 'Pratinjau Baru' : 'Logo Aktif'"></span>
+                    </div>
+
+                    <!-- Upload Input Controls -->
+                    <div class="flex-1 space-y-3">
+                        <div>
+                            <input type="file" 
+                                   name="site_logo" 
+                                   id="site_logo" 
+                                   accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml"
+                                   @change="const file = $event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { logoPreview = e.target.result; removeLogo = false; }; reader.readAsDataURL(file); }"
+                                   class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-950 file:text-white hover:file:bg-blue-900 cursor-pointer bg-white border border-slate-200 rounded-lg p-1">
+                            @error('site_logo')
+                                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-2xs text-slate-500">
+                            <span>Format didukung: <strong>PNG, JPG, WEBP, SVG</strong> (Maks. 2 MB). Disarankan rasio 1:1.</span>
+                            
+                            @if(\App\Models\Setting::get('site_logo'))
+                                <label class="inline-flex items-center text-red-600 hover:text-red-700 cursor-pointer font-bold">
+                                    <input type="checkbox" name="remove_logo" value="1" x-model="removeLogo" @change="if(removeLogo) { logoPreview = null; document.getElementById('site_logo').value = ''; }" class="w-3.5 h-3.5 rounded text-red-600 focus:ring-red-500 mr-1.5">
+                                    <span>Hapus logo kustom (Gunakan lambang JS default)</span>
+                                </label>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

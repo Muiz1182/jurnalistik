@@ -212,9 +212,15 @@
             <!-- Mobile Drawer Header -->
             <div class="p-5 bg-blue-950 text-white flex items-center justify-between border-b border-blue-900">
                 <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-sm">
-                        JS
-                    </div>
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <div class="w-9 h-9 rounded-lg overflow-hidden bg-white p-0.5 border border-slate-700 shrink-0">
+                            <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                    @else
+                        <div class="w-9 h-9 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                            JS
+                        </div>
+                    @endif
                     <div>
                         <span class="font-extrabold text-sm block leading-tight">JURNALISTIK SPELAND</span>
                         <span class="text-3xs text-slate-300 block">SMP Negeri 9 Probolinggo</span>
