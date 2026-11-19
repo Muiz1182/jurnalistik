@@ -68,11 +68,11 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-left sm:text-right w-full sm:w-auto">
                         <div class="font-medium text-slate-700">
                             {{ $article->published_at ? $article->published_at->locale('id')->isoFormat('dddd, D MMMM Y • HH:mm') . ' WIB' : 'Draft Redaksi' }}
                         </div>
-                        <div class="flex items-center justify-end space-x-3 text-slate-400 mt-0.5">
+                        <div class="flex items-center sm:justify-end space-x-3 text-slate-400 mt-0.5">
                             <span class="flex items-center">
                                 <i data-lucide="eye" class="w-3.5 h-3.5 mr-1"></i>
                                 {{ number_format($article->views_count) }} dibaca

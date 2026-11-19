@@ -4,7 +4,7 @@
 @section('meta_description', 'Portal berita dan publikasi jurnalistik resmi SMP Negeri 9 Probolinggo. Mengabarkan fakta kegiatan, prestasi, adiwiyata, dan karya literasi murid.')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-12">
+<div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-8 sm:space-y-12">
 
     <!-- 1. HERO FRONT-PAGE SHOWCASE -->
     <section class="border-b border-slate-200/80 pb-10">

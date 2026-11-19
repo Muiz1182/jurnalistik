@@ -181,10 +181,36 @@
             </div>
 
         </div>
-    </div>
-</nav>
 
+        <!-- Mobile Quick-Category Horizontal Bar (Reflowed for phones & tablets) -->
+        <div class="lg:hidden flex items-center overflow-x-auto no-scrollbar py-2 px-1 space-x-1.5 text-xs font-bold whitespace-nowrap border-t border-slate-800/80 bg-slate-950">
+            <a href="{{ route('home') }}" 
+               class="inline-flex items-center px-3 py-1.5 rounded-lg transition min-h-[36px] {{ request()->routeIs('home') ? 'bg-red-600 text-white font-extrabold shadow-xs' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                <i data-lucide="home" class="w-3.5 h-3.5 mr-1 text-blue-400"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="{{ route('articles.index') }}" 
+               class="inline-flex items-center px-3 py-1.5 rounded-lg transition min-h-[36px] {{ request()->routeIs('articles.index') ? 'bg-red-600 text-white font-extrabold shadow-xs' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                <span>Semua Berita</span>
+            </a>
+            @foreach($allCategories as $mCat)
+                <a href="{{ route('articles.category', $mCat->slug) }}" 
+                   class="inline-flex items-center px-3 py-1.5 rounded-lg transition min-h-[36px] {{ request()->is('kategori/' . $mCat->slug) || request()->is('berita/kategori/' . $mCat->slug) ? 'bg-red-600 text-white font-extrabold shadow-xs' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                    <span>{{ $mCat->name }}</span>
+                </a>
+            @endforeach
+            <a href="{{ route('articles.popular') }}" 
+               class="inline-flex items-center px-3 py-1.5 rounded-lg transition min-h-[36px] text-amber-400 hover:bg-slate-900 {{ request()->routeIs('articles.popular') ? 'bg-amber-500 text-slate-950 font-extrabold shadow-xs' : 'bg-slate-900/80' }}">
+                <i data-lucide="flame" class="w-3.5 h-3.5 mr-1 text-amber-400"></i>
+                <span>Populer</span>
+            </a>
+            <a href="{{ route('multimedia.podcasts') }}" 
+               class="inline-flex items-center px-3 py-1.5 rounded-lg transition min-h-[36px] text-slate-300 hover:bg-slate-900 hover:text-white">
+                <i data-lucide="mic" class="w-3.5 h-3.5 mr-1 text-red-400"></i>
+                <span>Podcast</span>
+            </a>
         </div>
+
     </div>
 </nav>
 
@@ -234,71 +260,107 @@
             <!-- Drawer Navigation Items -->
             <div class="p-4 space-y-4 text-xs font-bold text-slate-800">
                 <div class="space-y-1">
-                    <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 {{ request()->routeIs('home') ? 'bg-blue-50 text-blue-950' : '' }}">
-                        Beranda
+                    <a href="{{ route('home') }}" class="flex items-center px-3 py-2.5 min-h-[44px] rounded-xl hover:bg-slate-100 transition {{ request()->routeIs('home') ? 'bg-red-50 text-red-700 font-extrabold' : 'text-slate-800' }}">
+                        <i data-lucide="home" class="w-4 h-4 mr-2.5 text-blue-900 shrink-0"></i>
+                        <span>Beranda Utama</span>
                     </a>
-                    <a href="{{ route('articles.index') }}" class="block px-3 py-2 rounded-lg hover:bg-slate-100">
-                        Semua Berita
+                    <a href="{{ route('articles.index') }}" class="flex items-center px-3 py-2.5 min-h-[44px] rounded-xl hover:bg-slate-100 transition text-slate-800">
+                        <i data-lucide="newspaper" class="w-4 h-4 mr-2.5 text-slate-500 shrink-0"></i>
+                        <span>Semua Berita</span>
                     </a>
-                    <a href="{{ route('articles.popular') }}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 text-amber-700">
-                        Berita Populer 🔥
+                    <a href="{{ route('articles.popular') }}" class="flex items-center px-3 py-2.5 min-h-[44px] rounded-xl hover:bg-slate-100 transition text-amber-700">
+                        <i data-lucide="flame" class="w-4 h-4 mr-2.5 text-amber-500 shrink-0"></i>
+                        <span>Berita Terpopuler 🔥</span>
                     </a>
-                    <a href="{{ route('articles.latest') }}" class="block px-3 py-2 rounded-lg hover:bg-slate-100">
-                        Berita Terbaru
+                    <a href="{{ route('articles.latest') }}" class="flex items-center px-3 py-2.5 min-h-[44px] rounded-xl hover:bg-slate-100 transition text-slate-800">
+                        <i data-lucide="clock" class="w-4 h-4 mr-2.5 text-slate-500 shrink-0"></i>
+                        <span>Berita Terbaru</span>
                     </a>
-                    <a href="{{ route('articles.opinion') }}" class="block px-3 py-2 rounded-lg hover:bg-slate-100">
-                        Opini & Esai Murid
+                    <a href="{{ route('articles.opinion') }}" class="flex items-center px-3 py-2.5 min-h-[44px] rounded-xl hover:bg-slate-100 transition text-slate-800">
+                        <i data-lucide="message-square" class="w-4 h-4 mr-2.5 text-slate-500 shrink-0"></i>
+                        <span>Opini & Esai Murid</span>
                     </a>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100">
                     <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Rubrik Liputan:</span>
-                    <div class="space-y-0.5">
+                    <div class="space-y-1">
                         @foreach($allCategories as $cat)
-                            <a href="{{ route('articles.category', $cat->slug) }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">
-                                {{ $cat->name }}
+                            <a href="{{ route('articles.category', $cat->slug) }}" class="flex items-center justify-between px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                                <span class="flex items-center">
+                                    <span class="w-2 h-2 rounded-full mr-2.5 shrink-0" style="background-color: {{ $cat->color ?: '#1E3A8A' }}"></span>
+                                    <span>{{ $cat->name }}</span>
+                                </span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300"></i>
                             </a>
                         @endforeach
                     </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100">
-                    <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Multimedia:</span>
-                    <div class="space-y-0.5">
-                        <a href="{{ route('multimedia.galleries') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Galeri Foto</a>
-                        <a href="{{ route('multimedia.videos') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Video Jurnalistik</a>
-                        <a href="{{ route('multimedia.podcasts') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Podcast SPELAND</a>
-                        <a href="{{ route('multimedia.special-coverages') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Liputan Khusus</a>
+                    <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Multimedia & Liputan:</span>
+                    <div class="space-y-1">
+                        <a href="{{ route('multimedia.galleries') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="image" class="w-4 h-4 mr-2.5 text-indigo-500 shrink-0"></i>
+                            <span>Galeri Foto Sekolah</span>
+                        </a>
+                        <a href="{{ route('multimedia.videos') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="video" class="w-4 h-4 mr-2.5 text-red-500 shrink-0"></i>
+                            <span>Video Jurnalistik</span>
+                        </a>
+                        <a href="{{ route('multimedia.podcasts') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="mic" class="w-4 h-4 mr-2.5 text-amber-500 shrink-0"></i>
+                            <span>Podcast SPELAND</span>
+                        </a>
+                        <a href="{{ route('multimedia.special-coverages') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="layers" class="w-4 h-4 mr-2.5 text-blue-600 shrink-0"></i>
+                            <span>Liputan Khusus</span>
+                        </a>
                     </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100">
-                    <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Redaksi:</span>
-                    <div class="space-y-0.5">
-                        <a href="{{ route('about') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Tentang Kami</a>
-                        <a href="{{ route('editorial.structure') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Struktur Redaksi</a>
-                        <a href="{{ route('editorial.policy') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Kebijakan Redaksi</a>
-                        <a href="{{ route('journalistic.guidelines') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Pedoman Pemberitaan</a>
-                        <a href="{{ route('contact') }}" class="block px-3 py-1.5 rounded-md hover:bg-slate-100 text-slate-700">Kontak & Hak Jawab</a>
+                    <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Redaksi & Standar Pers:</span>
+                    <div class="space-y-1">
+                        <a href="{{ route('about') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="info" class="w-4 h-4 mr-2.5 text-slate-400 shrink-0"></i>
+                            <span>Tentang Kami</span>
+                        </a>
+                        <a href="{{ route('editorial.structure') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="users" class="w-4 h-4 mr-2.5 text-slate-400 shrink-0"></i>
+                            <span>Struktur Redaksi</span>
+                        </a>
+                        <a href="{{ route('editorial.policy') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="shield-check" class="w-4 h-4 mr-2.5 text-blue-500 shrink-0"></i>
+                            <span>Kebijakan Redaksi</span>
+                        </a>
+                        <a href="{{ route('journalistic.guidelines') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="heart-handshake" class="w-4 h-4 mr-2.5 text-pink-500 shrink-0"></i>
+                            <span>Pedoman Pemberitaan Ramah Anak</span>
+                        </a>
+                        <a href="{{ route('contact') }}" class="flex items-center px-3 py-2 min-h-[40px] rounded-lg hover:bg-slate-100 text-slate-700 transition">
+                            <i data-lucide="mail" class="w-4 h-4 mr-2.5 text-emerald-500 shrink-0"></i>
+                            <span>Kontak & Hak Jawab</span>
+                        </a>
                     </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100">
                     <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block px-3 mb-2">Kanal Resmi:</span>
                     <div class="flex items-center space-x-2 px-3">
-                        <a href="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook', '#')) }}" target="_blank" rel="noopener" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="TikTok">
+                        <a href="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook', '#')) }}" target="_blank" rel="noopener" class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="TikTok">
                             <svg class="w-4 h-4 fill-current text-slate-900" viewBox="0 0 24 24">
                                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.49 6.27 6.27 0 0 0 1.9-4.49V8.75a8.16 8.16 0 0 0 4.87 1.58V6.89c-.338-.002-.676-.07-1-.2z"/>
                             </svg>
                         </a>
-                        <a href="{{ \App\Models\Setting::get('social_instagram', '#') }}" target="_blank" rel="noopener" class="p-2 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-600 transition" title="Instagram">
+                        <a href="{{ \App\Models\Setting::get('social_instagram', '#') }}" target="_blank" rel="noopener" class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 transition" title="Instagram">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
                             </svg>
                         </a>
-                        <a href="{{ \App\Models\Setting::get('social_youtube', '#') }}" target="_blank" rel="noopener" class="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition" title="YouTube">
+                        <a href="{{ \App\Models\Setting::get('social_youtube', '#') }}" target="_blank" rel="noopener" class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition" title="YouTube">
                             <svg class="w-4 h-4 fill-current text-red-600" viewBox="0 0 24 24">
                                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                             </svg>
