@@ -4,30 +4,41 @@
 @section('meta_description', 'Hubungi dewan redaksi Jurnalistik SPELAND atau kirimkan siaran pers dan naskah tulisan.')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
 
-    <div class="border-b-2 border-blue-950 pb-5">
-        <span class="text-xs font-bold text-red-600 uppercase tracking-wider block">Sekretariat & Hubungan Masyarakat</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">
-            Kontak Redaksi & Pengiriman Naskah
-        </h1>
-        <p class="text-sm text-slate-600 mt-2">
-            Saluran resmi komunikasi, kemitraan liputan, permohonan hak jawab, serta pengiriman karya opini murid.
-        </p>
+    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 shadow-2xs">
+        <nav class="flex items-center space-x-2 text-xs text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}" class="hover:text-blue-900 transition flex items-center">
+                <i data-lucide="home" class="w-3.5 h-3.5 mr-1 text-slate-400"></i>
+                <span>Beranda</span>
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300"></i>
+            <span class="text-slate-900 font-semibold">Kontak & Redaksi</span>
+        </nav>
+
+        <div class="pt-1 border-t border-slate-100">
+            <span class="text-3xs uppercase tracking-widest font-black text-red-600 font-mono block mb-1">KOMUNIKASI & HAK JAWAB</span>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-slate-950 tracking-tight">
+                Kontak Redaksi & Pengiriman Naskah
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+                Saluran resmi komunikasi, kemitraan liputan, permohonan hak jawab, serta pengiriman karya opini murid SMP Negeri 9 Probolinggo.
+            </p>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         
         <!-- Info Kontak Card -->
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6">
-            <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3 flex items-center">
-                <i data-lucide="building" class="w-5 h-5 mr-2 text-blue-900"></i>
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3 flex items-center">
+                <i data-lucide="building" class="w-4 h-4 mr-2 text-blue-900"></i>
                 Alamat Redaksi
             </h2>
 
             <div class="space-y-4 text-xs sm:text-sm text-slate-700">
                 <div class="flex items-start">
-                    <i data-lucide="map-pin" class="w-5 h-5 mr-3 shrink-0 text-blue-900 mt-0.5"></i>
+                    <i data-lucide="map-pin" class="w-4 h-4 mr-3 shrink-0 text-blue-900 mt-0.5"></i>
                     <div>
                         <strong class="block text-slate-900">{{ \App\Models\Setting::get('school_name', 'SMP Negeri 9 Probolinggo') }}</strong>
                         <span class="text-slate-600 leading-relaxed">{{ \App\Models\Setting::get('school_address', 'Jl. Mastrip No. 123, Kanigaran, Kota Probolinggo, Jawa Timur 67213') }}</span>
@@ -35,9 +46,9 @@
                 </div>
 
                 <div class="flex items-center">
-                    <i data-lucide="mail" class="w-5 h-5 mr-3 shrink-0 text-blue-900"></i>
+                    <i data-lucide="mail" class="w-4 h-4 mr-3 shrink-0 text-blue-900"></i>
                     <div>
-                        <span class="block text-slate-500 text-xs">Email Redaksi:</span>
+                        <span class="block text-slate-500 text-3xs uppercase tracking-wider font-semibold">Email Redaksi:</span>
                         <a href="mailto:{{ \App\Models\Setting::get('editorial_email') }}" class="font-bold text-blue-900 hover:underline">
                             {{ \App\Models\Setting::get('editorial_email', 'redaksi.speland@gmail.com') }}
                         </a>
@@ -45,17 +56,17 @@
                 </div>
 
                 <div class="flex items-center">
-                    <i data-lucide="phone" class="w-5 h-5 mr-3 shrink-0 text-blue-900"></i>
+                    <i data-lucide="phone" class="w-4 h-4 mr-3 shrink-0 text-blue-900"></i>
                     <div>
-                        <span class="block text-slate-500 text-xs">Telepon Sekolah:</span>
+                        <span class="block text-slate-500 text-3xs uppercase tracking-wider font-semibold">Telepon Sekolah:</span>
                         <span class="font-bold text-slate-900">{{ \App\Models\Setting::get('school_phone', '(0335) 421999') }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="border-t border-slate-200 pt-5">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Jam Kerja Redaksi</h3>
-                <p class="text-xs text-slate-600">Senin - Jumat: 07.00 - 15.30 WIB<br>Sabtu: 07.30 - 12.00 WIB (Sesi Ekstrakurikuler)</p>
+            <div class="border-t border-slate-100 pt-5">
+                <h3 class="text-3xs font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">Jam Operasional Meja Redaksi</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">Senin &ndash; Jumat: 07.00 &ndash; 15.30 WIB<br>Sabtu: 07.30 &ndash; 12.00 WIB (Sesi Ekstrakurikuler Jurnalistik)</p>
             </div>
         </div>
 

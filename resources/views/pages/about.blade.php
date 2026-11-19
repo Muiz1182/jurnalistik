@@ -4,21 +4,32 @@
 @section('meta_description', 'Profil resmi, sejarah, dan visi misi Jurnalistik SMP Negeri 9 Probolinggo.')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
 
-    <div class="border-b-2 border-blue-950 pb-5">
-        <span class="text-xs font-bold text-red-600 uppercase tracking-wider block">Media Pers Sekolah</span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">
-            Tentang Jurnalistik SPELAND
-        </h1>
-        <p class="text-base text-slate-600 italic mt-2">
-            &ldquo;Mengabarkan Fakta, Menyuarakan Cerita.&rdquo;
-        </p>
+    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 shadow-2xs">
+        <nav class="flex items-center space-x-2 text-xs text-slate-500 mb-3" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}" class="hover:text-blue-900 transition flex items-center">
+                <i data-lucide="home" class="w-3.5 h-3.5 mr-1 text-slate-400"></i>
+                <span>Beranda</span>
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300"></i>
+            <span class="text-slate-900 font-semibold">Tentang Kami</span>
+        </nav>
+
+        <div class="pt-1 border-t border-slate-100">
+            <span class="text-3xs uppercase tracking-widest font-black text-red-600 font-mono block mb-1">PROFIL & MANIFESTO</span>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-slate-950 tracking-tight">
+                Tentang Jurnalistik SPELAND
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-600 font-serif italic mt-1 leading-relaxed">
+                &ldquo;Mengabarkan Fakta, Menyuarakan Cerita.&rdquo;
+            </p>
+        </div>
     </div>
 
     <!-- Sejarah & Deskripsi -->
-    <section class="space-y-4 text-slate-800 text-sm sm:text-base leading-relaxed">
-        <h2 class="text-xl font-bold text-slate-900 border-l-4 border-blue-900 pl-3">
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-4 text-slate-800 text-sm sm:text-base leading-relaxed">
+        <h2 class="text-lg font-bold text-slate-900 border-l-3 border-blue-900 pl-3">
             Profil Media
         </h2>
         <p>
@@ -30,10 +41,10 @@
     </section>
 
     <!-- Visi dan Misi -->
-    <section class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6">
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
         <div>
-            <h2 class="text-lg font-extrabold text-blue-950 uppercase tracking-wider mb-2 flex items-center">
-                <i data-lucide="compass" class="w-5 h-5 mr-2 text-blue-900"></i>
+            <h2 class="text-sm font-black text-blue-950 uppercase tracking-wider mb-2 flex items-center">
+                <i data-lucide="compass" class="w-4 h-4 mr-2 text-blue-900"></i>
                 Visi
             </h2>
             <p class="text-slate-800 text-sm sm:text-base leading-relaxed">
@@ -41,9 +52,9 @@
             </p>
         </div>
 
-        <div class="border-t border-slate-200 pt-6">
-            <h2 class="text-lg font-extrabold text-blue-950 uppercase tracking-wider mb-3 flex items-center">
-                <i data-lucide="target" class="w-5 h-5 mr-2 text-blue-900"></i>
+        <div class="border-t border-slate-100 pt-6">
+            <h2 class="text-sm font-black text-blue-950 uppercase tracking-wider mb-3 flex items-center">
+                <i data-lucide="target" class="w-4 h-4 mr-2 text-blue-900"></i>
                 Misi
             </h2>
             <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc list-inside">

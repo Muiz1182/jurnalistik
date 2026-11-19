@@ -9,7 +9,7 @@
         return in_array($c->slug, $primarySlugs);
     });
 
-    // If less than 4 found, take top 4
+    // Fallback if less than 4
     if ($primaryCategories->count() < 4) {
         $primaryCategories = $allCategories->take(4);
     }
@@ -39,14 +39,14 @@
             <ul class="flex items-center space-x-1 text-xs font-bold tracking-wide">
                 <li>
                     <a href="{{ route('home') }}" 
-                       class="inline-flex items-center py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->routeIs('home') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                       class="inline-flex items-center py-3.5 px-3.5 transition {{ request()->routeIs('home') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200 hover:bg-slate-900 hover:text-white' }}">
                         <i data-lucide="home" class="w-3.5 h-3.5 mr-1.5 opacity-90 text-blue-400"></i>
                         <span>BERANDA</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('articles.index') }}" 
-                       class="inline-block py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->routeIs('articles.index') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                       class="inline-block py-3.5 px-3.5 transition {{ request()->routeIs('articles.index') ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200 hover:bg-slate-900 hover:text-white' }}">
                         SEMUA BERITA
                     </a>
                 </li>
@@ -55,7 +55,7 @@
                 @foreach($primaryCategories as $navCat)
                     <li>
                         <a href="{{ route('articles.category', $navCat->slug) }}" 
-                           class="inline-block py-3.5 px-3.5 hover:bg-slate-900 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200' }}">
+                           class="inline-block py-3.5 px-3.5 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-slate-900 text-white border-b-2 border-red-500 font-extrabold' : 'text-slate-200 hover:bg-slate-900 hover:text-white' }}">
                             {{ $shortLabels[$navCat->slug] ?? strtoupper($navCat->name) }}
                         </a>
                     </li>
@@ -73,12 +73,15 @@
                              x-transition:enter="transition ease-out duration-150"
                              x-transition:enter-start="opacity-0 translate-y-1"
                              x-transition:enter-end="opacity-100 translate-y-0"
-                             class="absolute left-0 mt-0 w-60 bg-white text-slate-800 rounded-b-xl shadow-2xl py-2 border border-slate-100 z-50 divide-y divide-slate-100">
+                             class="absolute left-0 mt-0 w-64 bg-slate-900 text-slate-200 rounded-b-xl shadow-2xl py-2 border border-slate-800 z-50 divide-y divide-slate-800/80">
                             <div class="py-1">
                                 @foreach($otherCategories as $otherCat)
-                                    <a href="{{ route('articles.category', $otherCat->slug) }}" class="flex items-center justify-between px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900 transition">
-                                        <span>{{ $otherCat->name }}</span>
-                                        <span class="text-3xs text-slate-400 font-mono">{{ $otherCat->articles_count ?? '' }}</span>
+                                    <a href="{{ route('articles.category', $otherCat->slug) }}" class="flex items-center justify-between px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                        <span class="flex items-center">
+                                            <span class="w-2 h-2 rounded-full mr-2.5" style="background-color: {{ $otherCat->color ?: '#3B82F6' }}"></span>
+                                            <span>{{ $otherCat->name }}</span>
+                                        </span>
+                                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-500"></i>
                                     </a>
                                 @endforeach
                             </div>
@@ -88,7 +91,7 @@
 
                 <!-- Multimedia Dropdown -->
                 <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button class="inline-flex items-center py-3.5 px-3 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
+                    <button class="inline-flex items-center py-3.5 px-3.5 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
                         <span>MULTIMEDIA</span>
                         <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 opacity-70"></i>
                     </button>
@@ -97,29 +100,33 @@
                          x-transition:enter="transition ease-out duration-150"
                          x-transition:enter-start="opacity-0 translate-y-1"
                          x-transition:enter-end="opacity-100 translate-y-0"
-                         class="absolute left-0 mt-0 w-52 bg-white text-slate-800 rounded-b-xl shadow-2xl py-2 border border-slate-100 z-50">
-                        <a href="{{ route('multimedia.galleries') }}" class="flex items-center px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            <i data-lucide="camera" class="w-3.5 h-3.5 mr-2 text-blue-900"></i>
-                            <span>Galeri Foto</span>
-                        </a>
-                        <a href="{{ route('multimedia.videos') }}" class="flex items-center px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            <i data-lucide="video" class="w-3.5 h-3.5 mr-2 text-red-600"></i>
-                            <span>Video Jurnalistik</span>
-                        </a>
-                        <a href="{{ route('multimedia.podcasts') }}" class="flex items-center px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            <i data-lucide="mic" class="w-3.5 h-3.5 mr-2 text-purple-600"></i>
-                            <span>Podcast SPELAND</span>
-                        </a>
-                        <a href="{{ route('multimedia.special-coverages') }}" class="flex items-center px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900 border-t border-slate-100 mt-1 pt-2">
-                            <i data-lucide="bookmark-check" class="w-3.5 h-3.5 mr-2 text-amber-600"></i>
-                            <span>Liputan Khusus</span>
-                        </a>
+                         class="absolute left-0 mt-0 w-64 bg-slate-900 text-slate-200 rounded-b-xl shadow-2xl py-2 border border-slate-800 z-50 divide-y divide-slate-800/80">
+                        <div class="py-1">
+                            <a href="{{ route('multimedia.galleries') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="camera" class="w-4 h-4 mr-2.5 text-blue-400"></i>
+                                <span>Galeri Foto</span>
+                            </a>
+                            <a href="{{ route('multimedia.videos') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="video" class="w-4 h-4 mr-2.5 text-red-400"></i>
+                                <span>Video Jurnalistik</span>
+                            </a>
+                            <a href="{{ route('multimedia.podcasts') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="mic" class="w-4 h-4 mr-2.5 text-purple-400"></i>
+                                <span>Podcast SPELAND</span>
+                            </a>
+                        </div>
+                        <div class="py-1">
+                            <a href="{{ route('multimedia.special-coverages') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="bookmark-check" class="w-4 h-4 mr-2.5 text-amber-400"></i>
+                                <span>Liputan Khusus</span>
+                            </a>
+                        </div>
                     </div>
                 </li>
 
                 <!-- Tentang Redaksi Dropdown -->
                 <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button class="inline-flex items-center py-3 px-3 hover:bg-blue-900/80 text-slate-200 transition focus:outline-none font-bold">
+                    <button class="inline-flex items-center py-3.5 px-3.5 hover:bg-slate-900 text-slate-200 transition focus:outline-none font-bold">
                         <span>REDAKSI</span>
                         <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 opacity-70"></i>
                     </button>
@@ -128,37 +135,54 @@
                          x-transition:enter="transition ease-out duration-150"
                          x-transition:enter-start="opacity-0 translate-y-1"
                          x-transition:enter-end="opacity-100 translate-y-0"
-                         class="absolute right-0 mt-0 w-56 bg-white text-slate-800 rounded-b-xl shadow-2xl py-2 border border-slate-100 z-50">
-                        <a href="{{ route('about') }}" class="block px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            Tentang Jurnalistik SPELAND
-                        </a>
-                        <a href="{{ route('editorial.structure') }}" class="block px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            Struktur Redaksi
-                        </a>
-                        <a href="{{ route('editorial.policy') }}" class="block px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            Kebijakan Redaksi
-                        </a>
-                        <a href="{{ route('journalistic.guidelines') }}" class="block px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900">
-                            Pedoman Pemberitaan Ramah Anak
-                        </a>
-                        <a href="{{ route('contact') }}" class="block px-4 py-2 text-xs font-semibold hover:bg-slate-50 hover:text-blue-900 border-t border-slate-100 mt-1 pt-2">
-                            Kontak & Hak Jawab
-                        </a>
+                         class="absolute right-0 mt-0 w-72 bg-slate-900 text-slate-200 rounded-b-xl shadow-2xl py-2 border border-slate-800 z-50 divide-y divide-slate-800/80">
+                        <div class="py-1">
+                            <a href="{{ route('about') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="info" class="w-4 h-4 mr-2.5 text-blue-400 shrink-0"></i>
+                                <span>Tentang Jurnalistik SPELAND</span>
+                            </a>
+                            <a href="{{ route('editorial.structure') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="users" class="w-4 h-4 mr-2.5 text-teal-400 shrink-0"></i>
+                                <span>Struktur Dewan Redaksi</span>
+                            </a>
+                            <a href="{{ route('editorial.policy') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="shield" class="w-4 h-4 mr-2.5 text-amber-400 shrink-0"></i>
+                                <span>Kebijakan Redaksi</span>
+                            </a>
+                            <a href="{{ route('journalistic.guidelines') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="heart-handshake" class="w-4 h-4 mr-2.5 text-pink-400 shrink-0"></i>
+                                <span class="truncate">Pedoman Ramah Anak</span>
+                            </a>
+                        </div>
+                        <div class="py-1">
+                            <a href="{{ route('contact') }}" class="flex items-center px-4 py-2.5 text-xs font-semibold hover:bg-slate-800 hover:text-white transition">
+                                <i data-lucide="mail" class="w-4 h-4 mr-2.5 text-emerald-400 shrink-0"></i>
+                                <span>Kontak & Hak Jawab</span>
+                            </a>
+                        </div>
                     </div>
                 </li>
             </ul>
 
             <!-- Right Fast-Nav Pills -->
             <div class="flex items-center space-x-2 text-2xs font-bold">
-                <a href="{{ route('articles.popular') }}" class="py-1.5 px-3 rounded-lg bg-blue-900/90 hover:bg-amber-500 hover:text-slate-950 text-amber-300 transition flex items-center shadow-xs">
+                <a href="{{ route('articles.popular') }}" 
+                   class="py-1.5 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 hover:text-amber-300 transition flex items-center shadow-xs border border-slate-800"
+                   title="Berita Terpopuler">
                     <i data-lucide="flame" class="w-3.5 h-3.5 mr-1 text-amber-400"></i>
                     <span>Populer</span>
                 </a>
-                <a href="{{ route('articles.archive') }}" class="py-1.5 px-3 rounded-lg bg-blue-900/70 hover:bg-blue-800 text-slate-300 transition flex items-center">
+                <a href="{{ route('articles.archive') }}" 
+                   class="py-1.5 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center border border-slate-800"
+                   title="Arsip Berita">
                     <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-slate-400"></i>
                     <span>Arsip</span>
                 </a>
             </div>
+
+        </div>
+    </div>
+</nav>
 
         </div>
     </div>

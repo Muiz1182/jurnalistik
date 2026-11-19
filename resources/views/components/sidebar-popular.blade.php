@@ -41,9 +41,13 @@
             </div>
         @empty
             <div class="py-6 text-center space-y-2">
-                <i data-lucide="trending-up" class="w-6 h-6 text-slate-300 mx-auto"></i>
-                <p class="text-xs text-slate-500 font-medium">Belum ada statistik artikel terpopuler.</p>
-                <p class="text-3xs text-slate-400">Peringkat akan diperbarui secara otomatis berdasarkan akumulasi pembaca unik.</p>
+                <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center mx-auto">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <p class="text-xs text-slate-700 font-semibold">Peringkat Berita Populer</p>
+                <p class="text-3xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+                    Statistik artikel terpopuler akan diperbarui otomatis berdasarkan akumulasi kunjungan pembaca unik.
+                </p>
             </div>
         @endforelse
     </div>
