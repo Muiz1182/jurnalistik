@@ -1,27 +1,34 @@
-<div class="bg-slate-950 text-slate-300 text-xs border-b border-slate-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
-        <!-- Date, Edition & Location -->
-        <div class="flex items-center space-x-3 text-2xs sm:text-xs">
-            <span class="inline-flex items-center text-slate-200 font-semibold tracking-wide">
+<div class="bg-[#0A192F] text-slate-300 text-xs border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-4">
+        <!-- Date, Edition & Trending Tagline -->
+        <div class="flex items-center space-x-3 text-2xs sm:text-xs overflow-hidden">
+            <span class="inline-flex items-center text-slate-100 font-semibold tracking-wide shrink-0">
                 <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1.5 text-blue-400 shrink-0"></i>
                 <span>{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
             </span>
-            <span class="text-slate-700 hidden sm:inline">&bull;</span>
-            <span class="hidden sm:inline-flex items-center text-slate-400">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-slate-500 shrink-0"></i>
+            <span class="text-slate-600 hidden sm:inline">&bull;</span>
+            <span class="hidden sm:inline-flex items-center text-slate-300 shrink-0 font-medium">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-red-400 shrink-0"></i>
                 <span>Kota Probolinggo</span>
             </span>
-            <span class="text-slate-700 hidden md:inline">&bull;</span>
-            <span class="hidden md:inline-flex items-center text-amber-400 font-medium">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5 animate-pulse"></span>
-                <span>Edisi Digital Pers Sekolah</span>
-            </span>
+            <span class="text-slate-600 hidden lg:inline">&bull;</span>
+            <!-- Trending Topics Strip (Jawa Pos Editorial Touch) -->
+            <div class="hidden lg:flex items-center space-x-2 text-2xs font-semibold text-slate-300 overflow-hidden truncate">
+                <span class="text-amber-400 font-extrabold uppercase tracking-wider text-3xs shrink-0">Topik Populer:</span>
+                <a href="{{ route('articles.index', ['tag' => 'prestasi']) }}" class="hover:text-white transition">#PrestasiMurid</a>
+                <span class="text-slate-600">&bull;</span>
+                <a href="{{ route('articles.index', ['tag' => 'adiwiyata']) }}" class="hover:text-white transition">#AdiwiyataMandiri</a>
+                <span class="text-slate-600">&bull;</span>
+                <a href="{{ route('articles.index', ['tag' => 'literasi']) }}" class="hover:text-white transition">#PojokLiterasi</a>
+                <span class="text-slate-600">&bull;</span>
+                <a href="{{ route('articles.index', ['tag' => 'p5']) }}" class="hover:text-white transition">#KearifanLokal</a>
+            </div>
         </div>
 
         <!-- Social Media & Auth Meja Redaksi -->
-        <div class="flex items-center space-x-4 text-2xs sm:text-xs">
+        <div class="flex items-center space-x-4 text-2xs sm:text-xs shrink-0">
             <div class="hidden sm:flex items-center space-x-3 text-slate-400 border-r border-slate-800 pr-4">
-                <span class="text-3xs uppercase tracking-wider text-slate-500 font-bold">Kanal Resmi:</span>
+                <span class="text-3xs uppercase tracking-wider text-slate-400 font-bold">Kanal Resmi:</span>
                 <!-- TikTok -->
                 <a href="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook', '#')) }}" target="_blank" rel="noopener" class="hover:text-cyan-300 transition" title="TikTok Resmi SPELAND">
                     <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -48,7 +55,7 @@
             @auth
                 <div class="flex items-center space-x-3">
                     @if(auth()->user()->canAccessDashboard())
-                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center font-bold text-amber-300 hover:text-amber-200 transition bg-amber-950/70 border border-amber-800/80 px-2.5 py-1 rounded-lg text-2xs shadow-xs">
+                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center font-bold text-amber-300 hover:text-amber-200 transition bg-amber-950/80 border border-amber-800/80 px-2.5 py-1 rounded-lg text-2xs shadow-xs">
                             <i data-lucide="layout-dashboard" class="w-3 h-3 mr-1.5"></i>
                             Meja Redaksi
                         </a>

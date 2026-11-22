@@ -1,4 +1,4 @@
-<footer class="bg-slate-950 text-slate-300 border-t border-slate-800 mt-16">
+<footer class="bg-[#0B2545] text-slate-300 border-t border-[#07192F] mt-16">
     <!-- Main Footer Columns -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
@@ -11,13 +11,13 @@
                             <img src="{{ asset('storage/' . \App\Models\Setting::get('site_logo')) }}" alt="Logo" class="w-full h-full object-contain">
                         </div>
                     @else
-                        <div class="w-10 h-10 rounded-xl bg-blue-900 text-white flex items-center justify-center font-serif font-black text-lg border-b-2 border-red-500 shadow-md shrink-0">
+                        <div class="w-10 h-10 rounded-xl bg-[#07192F] text-white flex items-center justify-center font-serif font-black text-lg border-b-2 border-red-500 shadow-md shrink-0">
                             JS
                         </div>
                     @endif
                     <div>
                         <span class="text-lg font-black text-white tracking-tight block leading-none">
-                            JURNALISTIK <span class="text-blue-400">SPELAND</span>
+                            JURNALISTIK <span class="text-slate-100">SPELAND</span><span class="text-red-500">.</span>
                         </span>
                         <span class="text-3xs uppercase tracking-wider text-red-400 font-extrabold mt-0.5 block">
                             SMP Negeri 9 Probolinggo
@@ -25,27 +25,27 @@
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+                <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
                     Platform pers digital dan laboratorium literasi resmi SMP Negeri 9 Probolinggo. Mendidik jurnalis pelajar berintegritas, mandiri, dan berani mengabarkan fakta demi kemajuan pendidikan.
                 </p>
 
-                <div class="space-y-1 text-xs text-slate-400">
+                <div class="space-y-1.5 text-xs text-slate-300">
                     <p class="flex items-start">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-2 mt-0.5 text-blue-400 shrink-0"></i>
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-2 mt-0.5 text-red-400 shrink-0"></i>
                         <span>{{ \App\Models\Setting::get('school_address', 'Jl. Mastrip No. 123, Kanigaran, Kota Probolinggo') }}</span>
                     </p>
                     <p class="flex items-center">
-                        <i data-lucide="mail" class="w-3.5 h-3.5 mr-2 text-blue-400 shrink-0"></i>
+                        <i data-lucide="mail" class="w-3.5 h-3.5 mr-2 text-red-400 shrink-0"></i>
                         <span>{{ \App\Models\Setting::get('editorial_email', 'redaksi.speland@gmail.com') }}</span>
                     </p>
                     <p class="flex items-center">
-                        <i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-blue-400 shrink-0"></i>
+                        <i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-red-400 shrink-0"></i>
                         <span>{{ \App\Models\Setting::get('school_phone', '(0335) 421999') }}</span>
                     </p>
                 </div>
 
                 <!-- Social Media Channels -->
-                <div class="pt-3 border-t border-slate-800/80 space-y-2">
+                <div class="pt-3 border-t border-slate-700/80 space-y-2">
                     <span class="text-3xs uppercase tracking-wider text-slate-400 font-extrabold block">
                         Kanal Media Sosial Resmi
                     </span>
@@ -54,7 +54,7 @@
                         <a href="{{ \App\Models\Setting::get('social_tiktok', \App\Models\Setting::get('social_facebook', '#')) }}" 
                            target="_blank" 
                            rel="noopener" 
-                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
+                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[#07192F] hover:bg-slate-800 border border-slate-700 hover:border-cyan-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
                            title="TikTok Resmi SPELAND">
                             <svg class="w-4 h-4 text-cyan-400 group-hover:text-pink-400 transition shrink-0 fill-current" viewBox="0 0 24 24">
                                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.49 6.27 6.27 0 0 0 1.9-4.49V8.75a8.16 8.16 0 0 0 4.87 1.58V6.89c-.338-.002-.676-.07-1-.2z"/>
@@ -66,7 +66,7 @@
                         <a href="{{ \App\Models\Setting::get('social_instagram', '#') }}" 
                            target="_blank" 
                            rel="noopener" 
-                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-pink-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
+                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[#07192F] hover:bg-slate-800 border border-slate-700 hover:border-pink-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
                            title="Instagram Resmi">
                             <svg class="w-4 h-4 text-pink-400 group-hover:text-pink-300 transition shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
@@ -80,7 +80,7 @@
                         <a href="{{ \App\Models\Setting::get('social_youtube', '#') }}" 
                            target="_blank" 
                            rel="noopener" 
-                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-red-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
+                           class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[#07192F] hover:bg-slate-800 border border-slate-700 hover:border-red-400/60 text-slate-200 hover:text-white transition shadow-xs text-xs font-semibold group" 
                            title="Kanal YouTube SMPN 9">
                             <svg class="w-4 h-4 text-red-500 group-hover:text-red-400 transition shrink-0 fill-current" viewBox="0 0 24 24">
                                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
