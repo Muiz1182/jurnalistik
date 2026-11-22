@@ -160,99 +160,8 @@
                 </div>
 
             </div>
-        @else
-            <!-- Editorial Welcome Newspaper Showcase (When No Articles Published Yet) -->
-            <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-2xs relative">
-                <div class="border-b border-slate-200 pb-3.5 mb-6 flex flex-wrap items-center justify-between gap-2 text-2xs uppercase tracking-widest font-bold text-slate-900">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
-                        <span class="font-black text-red-600">EDISI PERDANA RESMI</span>
-                        <span class="text-slate-300">&bull;</span>
-                        <span class="text-slate-600 font-semibold">PORTAL PERS DIGITAL SEKOLAH</span>
-                    </div>
-                    <div class="text-slate-500 font-mono text-3xs">
-                        KOTA PROBOLINGGO &bull; JAWA TIMUR
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-7 space-y-4">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-[#0B2545] text-white text-3xs font-black uppercase tracking-wider">
-                            PENGANTAR REDAKSI
-                        </span>
-                        
-                        <h1 class="font-serif font-black text-2xl sm:text-3xl text-slate-950 leading-snug tracking-tight">
-                            Mengabarkan Fakta Terverifikasi, Menyuarakan Inspirasi Warga Sekolah
-                        </h1>
-
-                        <p class="font-serif italic text-sm sm:text-base text-slate-700 leading-snug border-l-3 border-red-600 pl-3.5 py-1">
-                            &ldquo;Pers pelajar yang beretika, independen, dan berpihak pada nilai karakter budi pekerti serta prestasi murid.&rdquo;
-                        </p>
-
-                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
-                            Selamat datang di portal berita resmi <strong>Jurnalistik SPELAND (SMP Negeri 9 Probolinggo)</strong>. Platform ini merupakan sistem manajemen redaksi dan media publikasi digital bertaraf profesional tempat seluruh karya jurnalistik, liputan dinamika sekolah, karya literasi, prestasi, dan kegiatan kesiswaan dihimpun serta disebarluaskan kepada masyarakat.
-                        </p>
-
-                        <div class="pt-3 flex flex-wrap items-center gap-2.5">
-                            @auth
-                                <a href="{{ route('admin.articles.create') }}" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center">
-                                    <i data-lucide="plus-circle" class="w-4 h-4 mr-1.5"></i>
-                                    <span>Tulis Naskah Berita</span>
-                                </a>
-                                <a href="{{ route('admin.dashboard') }}" class="px-4 py-2.5 bg-[#0B2545] hover:bg-[#07192F] text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center">
-                                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1.5"></i>
-                                    <span>Meja Redaksi</span>
-                                </a>
-                            @else
-                                <a href="{{ route('login') }}" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center">
-                                    <i data-lucide="lock" class="w-4 h-4 mr-1.5"></i>
-                                    <span>Masuk Meja Redaksi</span>
-                                </a>
-                                <a href="{{ route('editorial.structure') }}" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs rounded-xl transition flex items-center border border-slate-200">
-                                    <i data-lucide="users" class="w-4 h-4 mr-1.5 text-slate-600"></i>
-                                    <span>Struktur Redaksi</span>
-                                </a>
-                            @endauth
-                        </div>
-                    </div>
-
-                    @php
-                        $officialCategories = $navCategories ?? \App\Models\Category::where('is_active', true)->orderBy('order')->get();
-                    @endphp
-                    <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-                            <span class="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center">
-                                <i data-lucide="compass" class="w-4 h-4 mr-1.5 text-red-600"></i>
-                                Rubrikasi Peliputan
-                            </span>
-                            <span class="text-3xs text-slate-500 font-semibold font-mono">{{ $officialCategories->count() }} Rubrik</span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
-                            @foreach($officialCategories as $rubrik)
-                                <a href="{{ route('articles.category', $rubrik->slug) }}" 
-                                   class="flex items-center space-x-2 p-2 rounded-lg bg-white border border-slate-200/80 hover:border-red-600 hover:bg-red-50/40 transition group {{ $loop->last && $loop->count % 2 !== 0 ? 'col-span-2' : '' }}">
-                                    <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $rubrik->color ?: '#E60012' }}"></span>
-                                    <span class="truncate text-slate-800 group-hover:text-red-600">{{ $rubrik->name }}</span>
-                                </a>
-                            @endforeach
-                        </div>
-
-                        <div class="pt-3 border-t border-slate-200 space-y-2 text-2xs text-slate-600">
-                            <div class="flex items-center space-x-2 text-slate-700 font-medium">
-                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
-                                <span>Alur Redaksi Berlapis (Reporter &rarr; Editor &rarr; Pemred)</span>
-                            </div>
-                            <div class="flex items-center space-x-2 text-slate-700 font-medium">
-                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-600 shrink-0"></i>
-                                <span>Perlindungan Hak Narasumber Anak & Siswa</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-    </section>
+        </section>
+    @endif
 
     <!-- 2. SPECIAL COVERAGE / LIPUTAN KHUSUS DOSSIER (IF ACTIVE) -->
     @if($specialCoverage && $specialCoverage->articles->isNotEmpty())
@@ -436,6 +345,11 @@
 
             <!-- Right Sticky Sidebar (4 Cols) -->
             <div class="lg:col-span-4 space-y-6">
+                @if(!$heroHeadline)
+                    <!-- Berita Terpopuler Ranking -->
+                    <x-sidebar-popular :popularArticles="$popularArticles" />
+                @endif
+
                 <!-- 1. Profil Sekolah Broadside Widget -->
                 <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-3">
                     <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
