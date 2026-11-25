@@ -175,8 +175,55 @@ class Article extends Model
     public function scopePopular(Builder $query, int $days = 30): Builder
     {
         return $query->published()
+            ->when($days > 0, fn($q) => $q->where('published_at', '>=', now()->subDays($days)))
+            ->orderByDesc('views_count')
+            ->latest('published_at');
+    }
+
+    /**
+     * Get top popular published articles with smart fallback:
+     * - First priority: Most viewed articles published in the recent period ($days)
+     * - Second priority: If fewer than $limit, seamlessly backfill with all-time most viewed published articles
+     * - Third priority: Break any ties with latest published_at
+     * Guarantees returning up to $limit articles as long as published articles exist.
+     *
+     * @param int $limit Number of popular articles to return (default 5)
+     * @param int $days Recency window in days (default 30)
+     * @param int|array|null $excludeId ID or array of IDs to exclude (e.g. current article)
+     * @return \Illuminate\Database\Eloquent\Collection<int, Article>
+     */
+    public static function getPopular(int $limit = 5, int $days = 30, int|array|null $excludeId = null)
+    {
+        $excludeIds = is_array($excludeId) ? $excludeId : ($excludeId ? [$excludeId] : []);
+
+        $baseQuery = static::published()
+            ->when(!empty($excludeIds), fn($q) => $q->whereNotIn('id', $excludeIds))
+            ->with(['category', 'author']);
+
+        // 1. Articles with views published in the recent window
+        $recent = (clone $baseQuery)
             ->where('published_at', '>=', now()->subDays($days))
-            ->orderByDesc('views_count');
+            ->orderByDesc('views_count')
+            ->latest('published_at')
+            ->take($limit)
+            ->get();
+
+        if ($recent->count() >= $limit) {
+            return $recent;
+        }
+
+        // 2. Backfill with all-time most viewed / latest published articles
+        $allExclude = array_merge($excludeIds, $recent->pluck('id')->toArray());
+        $remaining = $limit - $recent->count();
+
+        $backfill = (clone $baseQuery)
+            ->whereNotIn('id', $allExclude)
+            ->orderByDesc('views_count')
+            ->latest('published_at')
+            ->take($remaining)
+            ->get();
+
+        return $recent->concat($backfill);
     }
 
     // PostgreSQL Full Text Search Scope

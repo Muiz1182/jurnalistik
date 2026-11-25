@@ -15,13 +15,19 @@
             <!-- Trending Topics Strip (Jawa Pos Editorial Touch) -->
             <div class="hidden lg:flex items-center space-x-2 text-2xs font-semibold text-slate-300 overflow-hidden truncate">
                 <span class="text-amber-400 font-extrabold uppercase tracking-wider text-3xs shrink-0">Topik Populer:</span>
-                <a href="{{ route('articles.index', ['tag' => 'prestasi']) }}" class="hover:text-white transition">#PrestasiMurid</a>
-                <span class="text-slate-600">&bull;</span>
-                <a href="{{ route('articles.index', ['tag' => 'adiwiyata']) }}" class="hover:text-white transition">#AdiwiyataMandiri</a>
-                <span class="text-slate-600">&bull;</span>
-                <a href="{{ route('articles.index', ['tag' => 'literasi']) }}" class="hover:text-white transition">#PojokLiterasi</a>
-                <span class="text-slate-600">&bull;</span>
-                <a href="{{ route('articles.index', ['tag' => 'p5']) }}" class="hover:text-white transition">#KearifanLokal</a>
+                @php
+                    $trendingTags = \App\Models\Tag::has('articles')->withCount('articles')->orderByDesc('articles_count')->take(4)->get();
+                @endphp
+                @forelse($trendingTags as $tag)
+                    <a href="{{ route('articles.index', ['tag' => $tag->slug]) }}" class="hover:text-white transition">#{{ $tag->name }}</a>
+                    @if(!$loop->last)<span class="text-slate-600">&bull;</span>@endif
+                @empty
+                    <a href="{{ route('articles.index', ['tag' => 'prestasi']) }}" class="hover:text-white transition">#PrestasiMurid</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="{{ route('articles.index', ['tag' => 'adiwiyata']) }}" class="hover:text-white transition">#AdiwiyataMandiri</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="{{ route('articles.index', ['tag' => 'literasi']) }}" class="hover:text-white transition">#PojokLiterasi</a>
+                @endforelse
             </div>
         </div>
 

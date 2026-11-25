@@ -18,26 +18,30 @@ class HomeController extends Controller
     public function index(): View
     {
         // 1. Breaking News
-        $breakingNews = Article::breaking()->take(5)->get();
+        $breakingNews = Article::breaking()->with(['category'])->take(5)->get();
 
-        // 2. Hero Headline (Big editorial feature)
+        // 2. Hero Headline (Editor-selected headline -> featured -> latest published)
         $heroHeadline = Article::headlines()->with(['category', 'author'])->first();
+        if (!$heroHeadline) {
+            $heroHeadline = Article::featured()->with(['category', 'author'])->first();
+        }
         if (!$heroHeadline) {
             $heroHeadline = Article::published()->with(['category', 'author'])->latest('published_at')->first();
         }
 
-        // 3. Featured Secondary Articles
+        // 3. Featured Secondary Articles (Sorotan Redaksi / Pilihan Editor)
         $excludeIds = $heroHeadline ? [$heroHeadline->id] : [];
         $secondaryHeadlines = Article::published()
             ->whereNotIn('id', $excludeIds)
             ->with(['category', 'author'])
+            ->orderByDesc('is_featured')
             ->latest('published_at')
             ->take(3)
             ->get();
 
         $excludeIds = array_merge($excludeIds, $secondaryHeadlines->pluck('id')->toArray());
 
-        // 4. Latest News (Berita Terbaru)
+        // 4. Latest News (Kabar Terkini Berita Sekolah)
         $latestArticles = Article::published()
             ->whereNotIn('id', $excludeIds)
             ->with(['category', 'author'])
@@ -45,38 +49,42 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        // 5. Popular News (Berita Populer - calculated from actual views)
-        $popularArticles = Article::popular(30)
-            ->with(['category', 'author'])
-            ->take(5)
-            ->get();
+        // 5. Popular News (Berita Terpopuler with smart recency & backfill)
+        $popularArticles = Article::getPopular(5);
 
-        // 6. Articles by Category Highlights
+        // 6. Articles by Category Highlights (Rubrikasi Utama Beranda)
         $pendidikanArticles = Article::published()
             ->whereHas('category', fn($q) => $q->where('slug', 'pendidikan'))
-            ->with('author')
+            ->with(['category', 'author'])
             ->latest('published_at')
             ->take(4)
             ->get();
 
         $prestasiArticles = Article::published()
             ->whereHas('category', fn($q) => $q->where('slug', 'prestasi'))
-            ->with('author')
+            ->with(['category', 'author'])
+            ->latest('published_at')
+            ->take(4)
+            ->get();
+
+        $kegiatanArticles = Article::published()
+            ->whereHas('category', fn($q) => $q->where('slug', 'kegiatan'))
+            ->with(['category', 'author'])
             ->latest('published_at')
             ->take(4)
             ->get();
 
         $lingkunganArticles = Article::published()
             ->whereHas('category', fn($q) => $q->where('slug', 'lingkungan'))
-            ->with('author')
+            ->with(['category', 'author'])
             ->latest('published_at')
             ->take(4)
             ->get();
 
-        // 7. Opini & Esai Murid
+        // 7. Opini & Esai Murid / Guru
         $opiniArticles = Article::published()
             ->whereHas('category', fn($q) => $q->where('slug', 'opini'))
-            ->with('author')
+            ->with(['category', 'author'])
             ->latest('published_at')
             ->take(3)
             ->get();
@@ -101,6 +109,7 @@ class HomeController extends Controller
             'popularArticles',
             'pendidikanArticles',
             'prestasiArticles',
+            'kegiatanArticles',
             'lingkunganArticles',
             'opiniArticles',
             'galleries',

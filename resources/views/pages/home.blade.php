@@ -207,26 +207,46 @@
     @endif
 
     <!-- 3. RUBRIKASI SIGNATURE JAWA POS (1 LEAD BESAR + 3 KARTU HORIZONTAL) -->
-    <!-- RUBRIK 1: PENDIDIKAN & PRESTASI -->
-    @if($pendidikanArticles->isNotEmpty() || $prestasiArticles->isNotEmpty())
-        @php
-            $rubrikLead = $pendidikanArticles->first() ?? $prestasiArticles->first();
-            $rubrikList = $pendidikanArticles->slice(1)->concat($prestasiArticles)->take(3);
-        @endphp
+    @php
+        $rubrikLead = null;
+        $rubrikList = collect();
+        $rubrikTitle = 'Pendidikan & Prestasi Sekolah';
+        $rubrikSlug = 'pendidikan';
+
+        if (isset($pendidikanArticles) && $pendidikanArticles->isNotEmpty()) {
+            $rubrikLead = $pendidikanArticles->first();
+            $rubrikList = $pendidikanArticles->slice(1)
+                ->concat($prestasiArticles ?? collect())
+                ->concat($kegiatanArticles ?? collect())
+                ->take(3);
+            $rubrikTitle = 'Pendidikan & Prestasi Sekolah';
+            $rubrikSlug = 'pendidikan';
+        } elseif (isset($prestasiArticles) && $prestasiArticles->isNotEmpty()) {
+            $rubrikLead = $prestasiArticles->first();
+            $rubrikList = $prestasiArticles->slice(1)
+                ->concat($kegiatanArticles ?? collect())
+                ->take(3);
+            $rubrikTitle = 'Prestasi & Kejuaraan Sekolah';
+            $rubrikSlug = 'prestasi';
+        } elseif (isset($kegiatanArticles) && $kegiatanArticles->isNotEmpty()) {
+            $rubrikLead = $kegiatanArticles->first();
+            $rubrikList = $kegiatanArticles->slice(1)->take(3);
+            $rubrikTitle = 'Kegiatan & Dinamika Sekolah';
+            $rubrikSlug = 'kegiatan';
+        }
+    @endphp
+
+    @if($rubrikLead)
         <section class="border-b border-slate-200/90 pb-10">
             <!-- Jawa Pos Rubric Header -->
             <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900 mb-6">
                 <div class="flex items-center space-x-2">
                     <h2 class="font-black text-lg sm:text-xl uppercase tracking-tight text-slate-950 border-l-4 border-red-600 pl-3">
-                        Pendidikan & Prestasi Sekolah
+                        {{ $rubrikTitle }}
                     </h2>
                 </div>
                 <div class="flex items-center space-x-3 text-xs font-bold">
-                    <a href="{{ route('articles.category', 'pendidikan') }}" class="text-slate-600 hover:text-red-600 transition hidden sm:inline">Pendidikan</a>
-                    <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                    <a href="{{ route('articles.category', 'prestasi') }}" class="text-slate-600 hover:text-red-600 transition hidden sm:inline">Prestasi</a>
-                    <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                    <a href="{{ route('articles.category', 'pendidikan') }}" class="text-red-600 hover:text-red-700 transition flex items-center group">
+                    <a href="{{ route('articles.category', $rubrikSlug) }}" class="text-red-600 hover:text-red-700 transition flex items-center group">
                         <span>Lihat Semua</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 ml-0.5 group-hover:translate-x-0.5 transition-transform"></i>
                     </a>
@@ -235,46 +255,44 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 <!-- 1 Lead Besar (5 Columns) -->
-                @if($rubrikLead)
-                    <div class="lg:col-span-5">
-                        <article class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs hover:shadow-md transition duration-300 group flex flex-col h-full">
-                            <a href="{{ route('articles.show', $rubrikLead->slug) }}" class="aspect-[16/10] overflow-hidden bg-slate-900 block relative">
-                                <img src="{{ $rubrikLead->featured_image_url }}" alt="{{ $rubrikLead->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 left-3 bg-red-600 text-white text-3xs font-black uppercase tracking-wider px-2.5 py-1 rounded shadow-xs">
-                                    {{ $rubrikLead->category->name }}
-                                </span>
-                            </a>
-                            <div class="p-5 flex flex-col justify-between flex-grow space-y-3">
-                                <div>
-                                    <div class="flex items-center text-3xs text-slate-400 mb-2 space-x-2 font-medium">
-                                        <span>{{ $rubrikLead->published_at ? $rubrikLead->published_at->locale('id')->isoFormat('D MMMM Y') : 'Baru' }}</span>
-                                        <span>&bull;</span>
-                                        <span>{{ $rubrikLead->author->name }}</span>
-                                    </div>
-                                    <h3 class="font-serif font-black text-base sm:text-lg text-slate-900 group-hover:text-red-600 transition leading-snug">
-                                        <a href="{{ route('articles.show', $rubrikLead->slug) }}">
-                                            {{ $rubrikLead->title }}
-                                        </a>
-                                    </h3>
-                                    @if($rubrikLead->excerpt)
-                                        <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed font-sans">
-                                            {{ $rubrikLead->excerpt }}
-                                        </p>
-                                    @endif
+                <div class="lg:col-span-5">
+                    <article class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs hover:shadow-md transition duration-300 group flex flex-col h-full">
+                        <a href="{{ route('articles.show', $rubrikLead->slug) }}" class="aspect-[16/10] overflow-hidden bg-slate-900 block relative">
+                            <img src="{{ $rubrikLead->featured_image_url }}" alt="{{ $rubrikLead->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 left-3 bg-red-600 text-white text-3xs font-black uppercase tracking-wider px-2.5 py-1 rounded shadow-xs">
+                                {{ $rubrikLead->category->name }}
+                            </span>
+                        </a>
+                        <div class="p-5 flex flex-col justify-between flex-grow space-y-3">
+                            <div>
+                                <div class="flex items-center text-3xs text-slate-400 mb-2 space-x-2 font-medium">
+                                    <span>{{ $rubrikLead->published_at ? $rubrikLead->published_at->locale('id')->isoFormat('D MMMM Y') : 'Baru' }}</span>
+                                    <span>&bull;</span>
+                                    <span>{{ $rubrikLead->author->name }}</span>
                                 </div>
-                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-500">
-                                    <span class="font-bold text-red-600 group-hover:underline flex items-center">
-                                        Baca Ulasan &rarr;
-                                    </span>
-                                    <span class="flex items-center text-slate-400 font-medium">
-                                        <i data-lucide="eye" class="w-3 h-3 mr-1 text-slate-400"></i>
-                                        {{ number_format($rubrikLead->views_count) }}
-                                    </span>
-                                </div>
+                                <h3 class="font-serif font-black text-base sm:text-lg text-slate-900 group-hover:text-red-600 transition leading-snug">
+                                    <a href="{{ route('articles.show', $rubrikLead->slug) }}">
+                                        {{ $rubrikLead->title }}
+                                    </a>
+                                </h3>
+                                @if($rubrikLead->excerpt)
+                                    <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed font-sans">
+                                        {{ $rubrikLead->excerpt }}
+                                    </p>
+                                @endif
                             </div>
-                        </article>
-                    </div>
-                @endif
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-500">
+                                <span class="font-bold text-red-600 group-hover:underline flex items-center">
+                                    Baca Ulasan &rarr;
+                                </span>
+                                <span class="flex items-center text-slate-400 font-medium">
+                                    <i data-lucide="eye" class="w-3 h-3 mr-1 text-slate-400"></i>
+                                    {{ number_format($rubrikLead->views_count) }} dibaca
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
 
                 <!-- 3 Stacked Horizontal Cards (7 Columns) -->
                 <div class="lg:col-span-7 space-y-4">

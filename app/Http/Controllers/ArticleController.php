@@ -38,7 +38,7 @@ class ArticleController extends Controller
 
         $articles = $query->paginate(12)->withQueryString();
         $categories = Category::where('is_active', true)->orderBy('name')->get();
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.index', compact('articles', 'categories', 'popularArticles'));
     }
@@ -55,7 +55,7 @@ class ArticleController extends Controller
                 abort(404);
             }
         } else {
-            // Track view with deduplication (session or IP per day)
+            // Track view with deduplication (session or IP cooldown)
             ArticleView::track($article, $request->ip(), $request->session()->getId());
         }
 
@@ -68,11 +68,8 @@ class ArticleController extends Controller
             ->take(4)
             ->get();
 
-        // Popular sidebar articles
-        $popularArticles = Article::popular(30)
-            ->where('id', '!=', $article->id)
-            ->take(5)
-            ->get();
+        // Popular sidebar articles (excluding current article)
+        $popularArticles = Article::getPopular(5, 30, $article->id);
 
         $isBookmarked = auth()->check() ? $article->isBookmarkedBy(auth()->user()) : false;
 
@@ -89,18 +86,22 @@ class ArticleController extends Controller
             ->latest('published_at')
             ->paginate(10);
 
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.category', compact('category', 'articles', 'popularArticles'));
     }
 
     public function popular(): View
     {
-        $articles = Article::popular(30)
+        $articles = Article::published()
             ->with(['category', 'author'])
+            ->orderByDesc('views_count')
+            ->latest('published_at')
             ->paginate(12);
 
-        return view('pages.articles.popular', compact('articles'));
+        $popularArticles = Article::getPopular(5);
+
+        return view('pages.articles.popular', compact('articles', 'popularArticles'));
     }
 
     public function latest(): View
@@ -110,7 +111,7 @@ class ArticleController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.latest', compact('articles', 'popularArticles'));
     }
@@ -125,7 +126,7 @@ class ArticleController extends Controller
             ->latest('published_at')
             ->paginate(10);
 
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.opinion', compact('articles', 'popularArticles'));
     }
@@ -154,7 +155,7 @@ class ArticleController extends Controller
 
         $articles = $query->paginate(10)->withQueryString();
         $categories = Category::where('is_active', true)->orderBy('name')->get();
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.search', compact('articles', 'q', 'categories', 'popularArticles'));
     }
@@ -172,7 +173,7 @@ class ArticleController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $popularArticles = Article::popular(30)->take(5)->get();
+        $popularArticles = Article::getPopular(5);
 
         return view('pages.articles.archive', compact('articles', 'popularArticles', 'year', 'month'));
     }

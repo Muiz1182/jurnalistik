@@ -34,19 +34,35 @@ class ArticleView extends Model
     }
 
     /**
-     * Track an article view safely with deduplication (once per IP or session per day)
+     * Track an article view safely with deduplication:
+     * - Prevents rapid refresh/spam within the same session using session memory and session_id
+     * - Does not lock out different students/users on the same school WiFi or local IP
+     * - Smoothly increments views_count both in DB and on the $article instance in memory
      */
     public static function track(Article $article, string $ipAddress, ?string $sessionId = null): bool
     {
+        // 1. In-session fast check (prevents DB overhead on rapid F5 / refresh)
+        $sessionKey = 'viewed_article_' . $article->id;
+        if (session()->has($sessionKey)) {
+            $lastViewed = (int) session()->get($sessionKey);
+            // Cooldown of 1 hour (3600 seconds) per browsing session
+            if (now()->timestamp - $lastViewed < 3600) {
+                return false;
+            }
+        }
+
         $today = now()->toDateString();
         
+        // 2. Database deduplication check:
+        // When sessionId is present, match by (article_id, viewed_date, session_id).
+        // When sessionId is null (e.g. CLI or stateless), fall back to (article_id, viewed_date, ip_address).
+        // This fixes the bug where multiple clients sharing the same IP (127.0.0.1 or school Wi-Fi) were blocked.
         $alreadyViewed = static::where('article_id', $article->id)
             ->where('viewed_date', $today)
-            ->where(function ($q) use ($ipAddress, $sessionId) {
+            ->when($sessionId, function ($q) use ($sessionId) {
+                $q->where('session_id', $sessionId);
+            }, function ($q) use ($ipAddress) {
                 $q->where('ip_address', $ipAddress);
-                if ($sessionId) {
-                    $q->orWhere('session_id', $sessionId);
-                }
             })
             ->exists();
 
@@ -60,9 +76,13 @@ class ArticleView extends Model
             ]);
 
             $article->increment('views_count');
+            // Keep the in-memory object count fresh for the current request
+            $article->views_count = (int) $article->views_count;
+            session()->put($sessionKey, now()->timestamp);
             return true;
         }
 
+        session()->put($sessionKey, now()->timestamp);
         return false;
     }
 }
