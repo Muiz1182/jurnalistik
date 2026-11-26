@@ -15,8 +15,8 @@
                 <div class="lg:col-span-8 space-y-8">
                     <!-- Lead Headline Article -->
                     <article class="group">
-                        <!-- Dominant Media Container -->
-                        <div class="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-slate-900 shadow-sm mb-4">
+                        <!-- Dominant Media Container (Calibrated height so headline title is visible above the fold) -->
+                        <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[360px] sm:max-h-[390px] overflow-hidden rounded-2xl bg-slate-900 shadow-sm mb-4">
                             <a href="{{ route('articles.show', $heroHeadline->slug) }}" class="block w-full h-full">
                                 <img src="{{ $heroHeadline->featured_image_url }}" 
                                      alt="{{ $heroHeadline->title }}" 
@@ -59,7 +59,7 @@
                                 <span>&bull;</span>
                                 <span class="inline-flex items-center text-slate-500 font-semibold">
                                     <i data-lucide="eye" class="w-3.5 h-3.5 mr-1 text-slate-400"></i>
-                                    {{ number_format($heroHeadline->views_count) }} pembaca
+                                    {{ number_format($heroHeadline->views_count) }} dibaca
                                 </span>
                             </div>
 

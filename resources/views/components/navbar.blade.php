@@ -53,9 +53,14 @@
 
                 <!-- Primary Categories -->
                 @foreach($primaryCategories as $navCat)
+                    @php
+                        $isNavCatActive = request()->is('kategori/' . $navCat->slug) 
+                            || request()->is('berita/kategori/' . $navCat->slug)
+                            || (isset($article) && isset($article->category) && $article->category->slug === $navCat->slug);
+                    @endphp
                     <li>
                         <a href="{{ route('articles.category', $navCat->slug) }}" 
-                           class="inline-block py-3.5 px-3.5 transition {{ request()->is('kategori/' . $navCat->slug) || request()->is('berita/kategori/' . $navCat->slug) ? 'bg-[#07192F] text-white border-b-[3px] border-red-600 font-black' : 'text-slate-100 hover:bg-[#13335D] hover:text-white' }}">
+                           class="inline-block py-3.5 px-3.5 transition {{ $isNavCatActive ? 'bg-[#07192F] text-white border-b-[3px] border-red-600 font-black' : 'text-slate-100 hover:bg-[#13335D] hover:text-white' }}">
                             {{ $shortLabels[$navCat->slug] ?? strtoupper($navCat->name) }}
                         </a>
                     </li>
@@ -194,8 +199,13 @@
                 <span>Semua Berita</span>
             </a>
             @foreach($allCategories as $mCat)
+                @php
+                    $isMCatActive = request()->is('kategori/' . $mCat->slug) 
+                        || request()->is('berita/kategori/' . $mCat->slug)
+                        || (isset($article) && isset($article->category) && $article->category->slug === $mCat->slug);
+                @endphp
                 <a href="{{ route('articles.category', $mCat->slug) }}" 
-                   class="inline-flex items-center px-3.5 py-1.5 rounded-lg transition min-h-[38px] {{ request()->is('kategori/' . $mCat->slug) || request()->is('berita/kategori/' . $mCat->slug) ? 'bg-red-600 text-white font-black shadow-xs' : 'text-slate-200 hover:bg-[#13335D] hover:text-white' }}">
+                   class="inline-flex items-center px-3.5 py-1.5 rounded-lg transition min-h-[38px] {{ $isMCatActive ? 'bg-red-600 text-white font-black shadow-xs' : 'text-slate-200 hover:bg-[#13335D] hover:text-white' }}">
                     <span>{{ $mCat->name }}</span>
                 </a>
             @endforeach

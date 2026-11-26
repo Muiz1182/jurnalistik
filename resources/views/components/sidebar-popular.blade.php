@@ -55,13 +55,13 @@
                 </div>
             </div>
         @empty
-            <div class="py-6 text-center space-y-2">
-                <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center mx-auto">
-                    <i data-lucide="trending-up" class="w-5 h-5 text-red-500"></i>
+            <div class="py-5 text-center space-y-2 bg-slate-50/70 rounded-xl border border-dashed border-slate-200 p-4">
+                <div class="w-9 h-9 rounded-lg bg-white text-red-600 flex items-center justify-center mx-auto shadow-2xs border border-slate-200">
+                    <i data-lucide="flame" class="w-4 h-4 text-red-500"></i>
                 </div>
-                <p class="text-xs text-slate-800 font-bold">Peringkat Berita Populer</p>
+                <p class="text-xs text-slate-800 font-bold">Nantikan Berita Populer Berikutnya</p>
                 <p class="text-3xs text-slate-500 max-w-xs mx-auto leading-relaxed">
-                    Statistik artikel terpopuler akan diperbarui otomatis berdasarkan akumulasi kunjungan pembaca unik.
+                    Liputan kegiatan, prestasi, dan dinamika sekolah lainnya sedang dipersiapkan oleh tim redaksi.
                 </p>
             </div>
         @endforelse

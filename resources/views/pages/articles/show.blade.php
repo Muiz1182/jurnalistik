@@ -270,19 +270,40 @@
 
         <!-- SIDEBAR (4 Cols) -->
         <aside class="lg:col-span-4 space-y-6">
-            <!-- Popular Articles -->
-            <x-sidebar-popular :popularArticles="$popularArticles" />
+            <!-- Popular Articles or School Rubric Directory -->
+            @if($popularArticles->isNotEmpty())
+                <x-sidebar-popular :popularArticles="$popularArticles" />
+            @else
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-3">
+                    <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900">
+                        <h3 class="font-black text-slate-950 text-xs sm:text-sm uppercase tracking-wider flex items-center border-l-4 border-red-600 pl-2.5">
+                            Rubrik Berita Sekolah
+                        </h3>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed font-sans">
+                        Jelajahi rubrik liputan resmi SMP Negeri 9 Probolinggo untuk membaca ragam karya jurnalistik dan prestasi murid.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold pt-1">
+                        @foreach(\App\Models\Category::where('is_active', true)->orderBy('order')->take(6)->get() as $c)
+                            <a href="{{ route('articles.category', $c->slug) }}" class="flex items-center space-x-1.5 p-2 rounded-lg bg-slate-50 hover:bg-red-50 hover:text-red-700 transition border border-slate-200/80">
+                                <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $c->color ?: '#E60012' }}"></span>
+                                <span class="truncate">{{ $c->name }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <!-- Editorial Board Contact Pill -->
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
-                <h4 class="font-bold text-sm text-slate-900 uppercase tracking-wider mb-2 flex items-center">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-2">
+                <h4 class="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider mb-2 flex items-center border-l-3 border-[#0B2545] pl-2">
                     <i data-lucide="shield-check" class="w-4 h-4 mr-1.5 text-blue-900"></i>
-                    Pedoman Hak Jawab
+                    Pedoman Hak Jawab & Koreksi
                 </h4>
-                <p class="text-xs text-slate-600 leading-relaxed">
+                <p class="text-xs text-slate-600 leading-relaxed font-sans">
                     Sesuai dengan Kode Etik Jurnalistik dan Pedoman Pemberitaan Media Siber, redaksi Jurnalistik SPELAND melayani hak jawab dan koreksi fakta dari pembaca.
                 </p>
-                <a href="{{ route('journalistic.guidelines') }}" class="text-xs font-bold text-blue-900 hover:underline mt-2 inline-block">
+                <a href="{{ route('journalistic.guidelines') }}" class="text-xs font-bold text-red-600 hover:text-red-700 mt-2 inline-block">
                     Baca Pedoman Pemberitaan &rarr;
                 </a>
             </div>

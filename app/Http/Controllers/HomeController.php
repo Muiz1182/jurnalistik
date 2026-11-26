@@ -17,6 +17,8 @@ class HomeController extends Controller
 {
     public function index(): View
     {
+        $totalPublished = Article::published()->count();
+
         // 1. Breaking News
         $breakingNews = Article::breaking()->with(['category'])->take(5)->get();
 
@@ -42,15 +44,22 @@ class HomeController extends Controller
         $excludeIds = array_merge($excludeIds, $secondaryHeadlines->pluck('id')->toArray());
 
         // 4. Latest News (Kabar Terkini Berita Sekolah)
-        $latestArticles = Article::published()
-            ->whereNotIn('id', $excludeIds)
-            ->with(['category', 'author'])
-            ->latest('published_at')
-            ->take(6)
-            ->get();
+        // If total published articles is small (<= 3), don't aggressively exclude hero so feed isn't empty
+        $latestQuery = Article::published()->with(['category', 'author'])->latest('published_at');
+        if ($totalPublished > 3) {
+            $latestQuery->whereNotIn('id', $excludeIds);
+        }
+        $latestArticles = $latestQuery->take(6)->get();
 
         // 5. Popular News (Berita Terpopuler with smart recency & backfill)
-        $popularArticles = Article::getPopular(5);
+        // If there are other articles (> 1), exclude $heroHeadline on homepage so sidebar showcases other stories
+        $popularExclude = ($totalPublished > 1 && $heroHeadline) ? $heroHeadline->id : null;
+        $popularArticles = Article::getPopular(5, 30, $popularExclude);
+
+        // If after excluding hero there are no other articles, fall back to hero so sidebar has content
+        if ($popularArticles->isEmpty() && $heroHeadline) {
+            $popularArticles = collect([$heroHeadline]);
+        }
 
         // 6. Articles by Category Highlights (Rubrikasi Utama Beranda)
         $pendidikanArticles = Article::published()

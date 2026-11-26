@@ -59,7 +59,7 @@
 
             <!-- Auth Meja Redaksi -->
             @auth
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2.5">
                     @if(auth()->user()->canAccessDashboard())
                         <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center font-bold text-amber-300 hover:text-amber-200 transition bg-amber-950/80 border border-amber-800/80 px-2.5 py-1 rounded-lg text-2xs shadow-xs">
                             <i data-lucide="layout-dashboard" class="w-3 h-3 mr-1.5"></i>
@@ -71,7 +71,9 @@
                             Bacaan Saya
                         </a>
                     @endif
-                    <span class="text-slate-300 font-semibold hidden md:inline">{{ auth()->user()->name }}</span>
+                    <span class="text-slate-600 hidden md:inline">&bull;</span>
+                    <span class="text-slate-300 font-semibold hidden md:inline truncate max-w-[140px]">{{ auth()->user()->name }}</span>
+                    <span class="text-slate-600 hidden sm:inline">&bull;</span>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="text-slate-400 hover:text-red-400 transition text-2xs font-semibold">Keluar</button>
